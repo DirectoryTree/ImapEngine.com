@@ -92,7 +92,7 @@ export function ThemeSelector(props) {
               clsx(
                 'flex cursor-pointer items-center rounded-[0.625rem] p-1 select-none',
                 {
-                  'text-sky-500': selected,
+                  'text-pink-600': selected,
                   'text-slate-900 dark:text-white': focus && !selected,
                   'text-slate-700 dark:text-slate-400': !focus && !selected,
                   'bg-slate-100 dark:bg-slate-900/40': focus,

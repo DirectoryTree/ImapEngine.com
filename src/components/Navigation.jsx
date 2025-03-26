@@ -27,7 +27,7 @@ export function Navigation({ className, onLinkClick }) {
                     className={clsx(
                       'block w-full pl-3.5 before:pointer-events-none before:absolute before:top-1/2 before:-left-1 before:h-1.5 before:w-1.5 before:-translate-y-1/2 before:rounded-full',
                       link.href === pathname
-                        ? 'font-semibold text-sky-500 before:bg-sky-500'
+                        ? 'font-semibold text-pink-600 before:bg-pink-600'
                         : 'text-slate-500 before:hidden before:bg-slate-300 hover:text-slate-600 hover:before:block dark:text-slate-400 dark:before:bg-slate-700 dark:hover:text-slate-300',
                     )}
                   >
