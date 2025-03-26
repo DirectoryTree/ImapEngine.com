@@ -8,6 +8,12 @@ import { HeroBackground } from '@/components/HeroBackground'
 import blurCyanImage from '@/images/blur-cyan.png'
 import blurIndigoImage from '@/images/blur-indigo.png'
 
+import Prism from 'prismjs'
+import 'prismjs/components/prism-php'
+import 'prismjs/components/prism-bash'
+import 'prismjs/components/prism-clike'
+import 'prismjs/components/prism-markup-templating'
+
 const codeLanguage = 'php'
 const code = `use DirectoryTree\\\\ImapEngine\\\\ImapEngine;
 
@@ -137,6 +143,7 @@ export function Hero() {
                       ))}
                     </div>
                     <Highlight
+                      prism={Prism}
                       code={code}
                       language={codeLanguage}
                       theme={{ plain: {}, styles: [] }}
