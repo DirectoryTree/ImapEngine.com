@@ -66,7 +66,7 @@ export function Hero() {
                 Simple IMAP for PHP
               </p>
               <p className="mt-3 text-2xl tracking-tight text-slate-400">
-                A fluent API for managing IMAP mailboxes without the PHP extension.
+                Manage IMAP mailboxes without the PHP extension.
               </p>
               <div className="mt-8 flex gap-4 md:justify-center lg:justify-start">
                 <Button href="/docs/installation">Get started</Button>
