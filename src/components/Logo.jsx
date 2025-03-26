@@ -68,16 +68,13 @@ export function Logo(props) {
       fill='url("#SvgjsLinearGradient1332")'
       transform="matrix(.17677 0 0 .17677 -.354 -4.596)"
     >
-      <g sketchType="MSPage">
+      <g>
         <g
           xmlns="http://www.w3.org/2000/svg"
-          xmlnsSketch="http://www.bohemiancoding.com/sketch/ns"
-          sketchType="MSArtboardGroup"
           fill='url("#SvgjsLinearGradient1332")'
           fillRule="evenodd"
         >
           <path
-            sketchType="MSShapeGroup"
             d="M98 323.476c-24.661-25.167-41.783-57.75-47.71-94.095L2 201.501l48.114-27.778C63.214 90.028 135.63 26 223 26c96.65 0 175.002 78.35 175.002 175.001 0 88.162-65.194 161.098-150.001 173.229V176.002c0-41.425-33.58-75.002-75-75.002C131.57 101 98 134.58 98 176.002zm75.001-122.475c13.807 0 25-11.193 25-25s-11.193-25-25-25-25 11.193-25 25 11.193 25 25 25"
           ></path>
         </g>
