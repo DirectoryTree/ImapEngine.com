@@ -15,7 +15,7 @@ import 'prismjs/components/prism-clike'
 import 'prismjs/components/prism-markup-templating'
 
 const codeLanguage = 'php'
-const code = `use DirectoryTree\\\\ImapEngine\\\\ImapEngine;
+const code = `use DirectoryTree\\ImapEngine\\ImapEngine;
 
 $imap = new ImapEngine([
     'host' => 'imap.example.com',
@@ -70,16 +70,16 @@ export function Hero() {
               </p>
               <div className="mt-8 flex gap-4 md:justify-center lg:justify-start">
                 <Button href="/docs/installation">Get started</Button>
-                <Button href="https://github.com/DirectoryTree/ImapEngine" variant="secondary">
+                <Button
+                  href="https://github.com/DirectoryTree/ImapEngine"
+                  variant="secondary"
+                >
                   View on GitHub
                 </Button>
               </div>
             </div>
           </div>
           <div className="relative lg:static xl:pl-10">
-            <div className="absolute inset-x-[-50vw] -top-32 -bottom-48 [mask-image:linear-gradient(transparent,white,white)] lg:-top-32 lg:right-0 lg:-bottom-32 lg:left-[calc(50%+14rem)] lg:[mask-image:none] dark:[mask-image:linear-gradient(transparent,white,transparent)] lg:dark:[mask-image:linear-gradient(white,white,transparent)]">
-              <HeroBackground className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 lg:left-0 lg:translate-x-0 lg:translate-y-[-60%]" />
-            </div>
             <div className="relative">
               <Image
                 className="absolute -top-64 -right-64"
@@ -156,24 +156,16 @@ export function Hero() {
                         getTokenProps,
                       }) => (
                         <pre
-                          className={clsx(
-                            className,
-                            'flex overflow-x-auto pb-6',
-                          )}
+                          className={clsx('w-full px-4 pb-6', className)}
                           style={style}
                         >
-                          <code className="px-4">
-                            {tokens.map((line, lineIndex) => (
-                              <div key={lineIndex} {...getLineProps({ line })}>
-                                {line.map((token, tokenIndex) => (
-                                  <span
-                                    key={tokenIndex}
-                                    {...getTokenProps({ token })}
-                                  />
-                                ))}
-                              </div>
-                            ))}
-                          </code>
+                          {tokens.map((line, i) => (
+                            <div key={i} {...getLineProps({ line })}>
+                              {line.map((token, key) => (
+                                <span key={key} {...getTokenProps({ token })} />
+                              ))}
+                            </div>
+                          ))}
                         </pre>
                       )}
                     </Highlight>

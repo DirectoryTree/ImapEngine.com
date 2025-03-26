@@ -6,7 +6,6 @@ import 'prismjs/components/prism-bash'
 import 'prismjs/components/prism-clike'
 import 'prismjs/components/prism-markup-templating'
 import { Highlight } from 'prism-react-renderer'
-import { Fragment } from 'react'
 
 export function Fence({ children, language }) {
   return (
@@ -16,20 +15,15 @@ export function Fence({ children, language }) {
       code={children.trimEnd()}
       theme={{ plain: {}, styles: [] }}
     >
-      {({ className, style, tokens, getTokenProps }) => (
+      {({ className, style, tokens, getTokenProps, getLineProps }) => (
         <pre className={className} style={style}>
-          <code>
-            {tokens.map((line, lineIndex) => (
-              <Fragment key={lineIndex}>
-                {line
-                  .filter((token) => !token.empty)
-                  .map((token, tokenIndex) => (
-                    <span key={tokenIndex} {...getTokenProps({ token })} />
-                  ))}
-                {'\n'}
-              </Fragment>
-            ))}
-          </code>
+          {tokens.map((line, i) => (
+            <div key={i} {...getLineProps({ line })}>
+              {line.map((token, key) => (
+                <span key={key} {...getTokenProps({ token })} />
+              ))}
+            </div>
+          ))}
         </pre>
       )}
     </Highlight>
