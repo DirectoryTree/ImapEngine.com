@@ -123,12 +123,3 @@ $mailbox = new Mailbox([
     // ... other options
 ]);
 ```
-
-## Next Steps
-
-Now that you're connected to your mailbox, you can:
-
-- [Retrieve Folders](/docs/usage/retrieving-folders)
-- [Work with Messages](/docs/usage/retrieving-messages)
-- [Create Draft Messages](/docs/usage/creating-draft-messages)
-- [Monitor Mailboxes in Real-Time](/docs/usage/real-time-monitoring)

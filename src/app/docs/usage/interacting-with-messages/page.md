@@ -125,10 +125,3 @@ $encoding = $message->encoding();
 // Get message charset
 $charset = $message->charset();
 ```
-
-## Next Steps
-
-Now that you know how to interact with messages, you can:
-
-- [Create Draft Messages](/docs/usage/creating-draft-messages)
-- [Monitor Mailboxes in Real-Time](/docs/usage/real-time-monitoring)

@@ -101,12 +101,3 @@ $mailbox->createFolder('Parent/Child');
 // List all subfolders
 $subfolders = $mailbox->folders('Parent');
 ```
-
-## Next Steps
-
-Now that you know how to work with folders, you can:
-
-- [Retrieve Messages](/docs/usage/retrieving-messages)
-- [Interact with Messages](/docs/usage/interacting-with-messages)
-- [Create Draft Messages](/docs/usage/creating-draft-messages)
-- [Monitor Mailboxes in Real-Time](/docs/usage/real-time-monitoring)

@@ -127,9 +127,3 @@ $draft->subject('Updated Subject')
 // Add attachment to existing draft
 $draft->attach('path/to/file.pdf')->save();
 ```
-
-## Next Steps
-
-Now that you know how to work with draft messages, you can:
-
-- [Monitor Mailboxes in Real-Time](/docs/usage/real-time-monitoring)

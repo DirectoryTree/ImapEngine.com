@@ -109,11 +109,3 @@ $flags = $message->flags();
 // Get message attachments
 $attachments = $message->attachments();
 ```
-
-## Next Steps
-
-Now that you know how to retrieve messages, you can:
-
-- [Interact with Messages](/docs/usage/interacting-with-messages)
-- [Create Draft Messages](/docs/usage/creating-draft-messages)
-- [Monitor Mailboxes in Real-Time](/docs/usage/real-time-monitoring)
