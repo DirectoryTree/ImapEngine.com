@@ -6,7 +6,7 @@ nextjs:
     description: Learn how to interact with email messages using ImapEngine. Discover how to manage message flags, work with attachments, and handle message content.
 ---
 
-ImapEngine provides a rich set of methods to interact with email messages. Here's how to get started:
+ImapEngine provides a rich set of methods to interact with email messages.
 
 ## Message Flags
 

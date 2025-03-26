@@ -6,7 +6,7 @@ nextjs:
     description: Learn how to connect to IMAP mailboxes using ImapEngine. Discover different connection methods including basic, OAuth, and STARTTLS connections.
 ---
 
-ImapEngine provides a simple way to connect to IMAP mailboxes. Here's how to get started:
+ImapEngine provides a simple way to connect to IMAP mailboxes.
 
 ## Basic Connection
 

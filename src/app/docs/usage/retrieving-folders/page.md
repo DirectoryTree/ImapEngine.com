@@ -6,7 +6,7 @@ nextjs:
     description: Learn how to work with IMAP folders using ImapEngine. Discover how to list, create, delete, and manage email folders in your PHP application.
 ---
 
-ImapEngine provides a simple way to work with IMAP folders. Here's how to get started:
+ImapEngine provides a simple way to work with IMAP folders.
 
 ## Getting All Folders
 

@@ -6,7 +6,7 @@ nextjs:
     description: Learn how to create and manage draft email messages using ImapEngine. Discover how to compose, save, and send draft messages in your PHP application.
 ---
 
-ImapEngine allows you to create draft messages and save them to the server for later editing or sending. Here's how to get started:
+ImapEngine allows you to create draft messages and save them to the server for later editing or sending.
 
 ## Creating a Draft Message
 

@@ -6,7 +6,7 @@ nextjs:
     description: Learn how to retrieve and filter email messages using ImapEngine. Discover how to search, paginate, and access message properties in your PHP application.
 ---
 
-ImapEngine provides a powerful way to retrieve and work with email messages. Here's how to get started:
+ImapEngine provides a powerful way to retrieve and work with email messages.
 
 ## Basic Message Retrieval
 
