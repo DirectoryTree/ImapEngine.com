@@ -8,18 +8,26 @@ import { HeroBackground } from '@/components/HeroBackground'
 import blurCyanImage from '@/images/blur-cyan.png'
 import blurIndigoImage from '@/images/blur-indigo.png'
 
-const codeLanguage = 'javascript'
-const code = `export default {
-  strategy: 'predictive',
-  engine: {
-    cpus: 12,
-    backups: ['./storage/cache.wtf'],
-  },
-}`
+const codeLanguage = 'php'
+const code = `use DirectoryTree\\\\ImapEngine\\\\ImapEngine;
+
+$imap = new ImapEngine([
+    'host' => 'imap.example.com',
+    'port' => 993,
+    'encryption' => 'ssl',
+    'username' => 'user@example.com',
+    'password' => 'password'
+]);
+
+// Get messages from inbox
+$messages = $imap->folder('INBOX')->messages();
+
+// Get a specific message
+$message = $imap->message('123');`
 
 const tabs = [
-  { name: 'cache-advance.config.js', isActive: true },
-  { name: 'package.json', isActive: false },
+  { name: 'example.php', isActive: true },
+  { name: 'composer.json', isActive: false },
 ]
 
 function TrafficLightsIcon(props) {
@@ -49,15 +57,14 @@ export function Hero() {
             />
             <div className="relative">
               <p className="inline bg-linear-to-r from-indigo-200 via-sky-400 to-indigo-200 bg-clip-text font-display text-5xl tracking-tight text-transparent">
-                Never miss the cache again.
+                Simple IMAP for PHP
               </p>
               <p className="mt-3 text-2xl tracking-tight text-slate-400">
-                Cache every single thing your app could ever do ahead of time,
-                so your code never even has to run at all.
+                A fluent API for managing IMAP mailboxes without the PHP extension.
               </p>
               <div className="mt-8 flex gap-4 md:justify-center lg:justify-start">
-                <Button href="/">Get started</Button>
-                <Button href="/" variant="secondary">
+                <Button href="/docs/installation">Get started</Button>
+                <Button href="https://github.com/DirectoryTree/ImapEngine" variant="secondary">
                   View on GitHub
                 </Button>
               </div>

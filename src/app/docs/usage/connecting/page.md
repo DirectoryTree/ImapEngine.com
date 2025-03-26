@@ -109,8 +109,8 @@ The `debug` configuration option controls logging behavior for the mailbox. It a
 Example with custom logger:
 
 ```php
-use DirectoryTree\ImapEngine\Mailbox;
 use Psr\Log\LoggerInterface;
+use DirectoryTree\ImapEngine\Mailbox;
 
 class CustomLogger implements LoggerInterface {
     // Implement logger methods

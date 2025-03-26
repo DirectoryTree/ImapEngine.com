@@ -22,19 +22,19 @@ const lexend = localFont({
 
 export const metadata = {
   title: {
-    template: '%s - Docs',
-    default: 'CacheAdvance - Never miss the cache again.',
+    template: '%s - ImapEngine',
+    default: 'ImapEngine - Simple IMAP API for PHP',
   },
   description:
-    'Cache every single thing your app could ever do ahead of time, so your code never even has to run at all.',
+    'A simple, fluent API for managing IMAP mailboxes in PHP without the PHP extension.',
 }
 
 export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
-      className={clsx('h-full antialiased', inter.variable, lexend.variable)}
       suppressHydrationWarning
+      className={clsx('h-full antialiased', inter.variable, lexend.variable)}
     >
       <body className="flex min-h-full bg-white dark:bg-slate-900">
         <Providers>
