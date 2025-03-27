@@ -1,47 +1,105 @@
-pre[class*='language-'] {
-  color: var(--color-slate-50);
+html.dark {
+  pre[class*='language-'] {
+    color: var(--color-slate-50);
+  }
+
+  .token.tag,
+  .token.class-name,
+  .token.selector,
+  .token.selector .class,
+  .token.selector.class,
+  .token.function {
+    color: var(--color-pink-400);
+  }
+
+  .token.attr-name,
+  .token.keyword,
+  .token.rule,
+  .token.pseudo-class,
+  .token.important {
+    color: var(--color-slate-300);
+  }
+
+  .token.module {
+    color: var(--color-pink-400);
+  }
+
+  .token.attr-value,
+  .token.class,
+  .token.string,
+  .token.property {
+    color: var(--color-sky-300);
+  }
+
+  .token.punctuation,
+  .token.attr-equals {
+    color: var(--color-slate-500);
+  }
+
+  .token.unit,
+  .language-css .token.function {
+    color: var(--color-teal-200);
+  }
+
+  .token.comment,
+  .token.operator,
+  .token.combinator {
+    color: var(--color-slate-400);
+  }
 }
 
-.token.tag,
-.token.class-name,
-.token.selector,
-.token.selector .class,
-.token.selector.class,
-.token.function {
-  color: var(--color-pink-400);
-}
+html:not(.dark) {
+  pre[class*='language-'] {
+    color: var(--color-slate-800);
+  }
 
-.token.attr-name,
-.token.keyword,
-.token.rule,
-.token.pseudo-class,
-.token.important {
-  color: var(--color-slate-300);
-}
+  .prose pre[class*='language-'] {
+    box-shadow: none;
+    border: 1px solid var(--color-slate-200);
+    background-color: var(--color-slate-50);
+  }
 
-.token.module {
-  color: var(--color-pink-400);
-}
+  .token.tag,
+  .token.class-name,
+  .token.selector,
+  .token.selector .class,
+  .token.selector.class,
+  .token.function {
+    color: var(--color-pink-600);
+  }
 
-.token.attr-value,
-.token.class,
-.token.string,
-.token.property {
-  color: var(--color-sky-300);
-}
+  .token.attr-name,
+  .token.keyword,
+  .token.rule,
+  .token.pseudo-class,
+  .token.important {
+    color: var(--color-slate-700);
+  }
 
-.token.punctuation,
-.token.attr-equals {
-  color: var(--color-slate-500);
-}
+  .token.module {
+    color: var(--color-pink-600);
+  }
 
-.token.unit,
-.language-css .token.function {
-  color: var(--color-teal-200);
-}
+  .token.attr-value,
+  .token.class,
+  .token.string,
+  .token.property {
+    color: var(--color-sky-600);
+  }
 
-.token.comment,
-.token.operator,
-.token.combinator {
-  color: var(--color-slate-400);
+  .token.punctuation,
+  .token.attr-equals {
+    color: var(--color-slate-600);
+  }
+
+  .token.unit,
+  .language-css .token.function {
+    color: var(--color-teal-600);
+  }
+
+  .token.comment,
+  .token.operator,
+  .token.combinator {
+    color: var(--color-slate-500);
+  }
 }

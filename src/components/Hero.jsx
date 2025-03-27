@@ -47,19 +47,11 @@ function TrafficLightsIcon(props) {
 
 export function Hero() {
   return (
-    <div className="overflow-hidden dark:bg-slate-900 dark:mt-[-4.75rem] dark:-mb-32 dark:pt-[4.75rem] dark:pb-32">
+    <div className="overflow-hidden dark:mt-[-4.75rem] dark:-mb-32 dark:bg-slate-900 dark:pt-[4.75rem] dark:pb-32">
       <div className="py-16 sm:px-2 lg:relative lg:px-0 lg:py-20">
         <div className="mx-auto grid max-w-2xl grid-cols-1 items-center gap-x-8 gap-y-16 px-4 lg:max-w-8xl lg:grid-cols-2 lg:px-8 xl:gap-x-16 xl:px-12">
+          {/* Left side text */}
           <div className="relative z-10 md:text-center lg:text-left">
-            <Image
-              className="absolute right-full bottom-full -mr-72 -mb-56 opacity-50"
-              src={blurCyanImage}
-              alt=""
-              width={530}
-              height={530}
-              unoptimized
-              priority
-            />
             <div className="relative">
               <p className="inline font-display text-5xl tracking-tight text-black dark:text-white">
                 Simple IMAP for PHP
@@ -90,7 +82,7 @@ export function Hero() {
                 priority
               />
               <Image
-                className="absolute -right-44 -bottom-40"
+                className="hidden dark:block absolute -right-44 -bottom-40"
                 src={blurIndigoImage}
                 alt=""
                 width={567}
@@ -98,13 +90,17 @@ export function Hero() {
                 unoptimized
                 priority
               />
-              <div className="absolute inset-0 rounded-2xl bg-linear-to-tr from-sky-300 via-sky-300/70 to-blue-300 opacity-10 blur-lg" />
-              <div className="absolute inset-0 rounded-2xl bg-linear-to-tr from-sky-300 via-sky-300/70 to-blue-300 opacity-10" />
-              <div className="relative rounded-2xl bg-[#0A101F]/90 dark:bg-[#0A101F]/80 ring-1 ring-white/10 backdrop-blur-sm">
-                <div className="absolute -top-px right-11 left-20 h-px bg-linear-to-r from-sky-300/0 via-sky-300/70 to-sky-300/0" />
-                <div className="absolute right-20 -bottom-px left-11 h-px bg-linear-to-r from-blue-400/0 via-blue-400 to-blue-400/0" />
+              <div className="absolute inset-0 rounded-2xl bg-gradient-to-tr from-sky-300 via-sky-300/70 to-blue-300 opacity-10 blur-lg" />
+              <div className="absolute inset-0 rounded-2xl bg-gradient-to-tr from-sky-300 via-sky-300/70 to-blue-300 opacity-10" />
+
+              {/* Code block */}
+              <div className="relative rounded-2xl bg-white ring-1 ring-slate-900/10 backdrop-blur-sm dark:bg-[#0A101F]/80 dark:ring-white/10">
+                <div className="absolute -top-px right-11 left-20 h-px bg-gradient-to-r from-sky-300/0 via-sky-300/70 to-sky-300/0" />
+                <div className="absolute right-20 -bottom-px left-11 h-px bg-gradient-to-r from-blue-400/0 via-blue-400 to-blue-400/0" />
                 <div className="pt-4 pl-4">
                   <TrafficLightsIcon className="h-2.5 w-auto stroke-slate-500/30" />
+
+                  {/* Tabs */}
                   <div className="mt-4 flex space-x-2 text-xs">
                     {tabs.map((tab) => (
                       <div
@@ -112,14 +108,14 @@ export function Hero() {
                         className={clsx(
                           'flex h-6 rounded-full',
                           tab.isActive
-                            ? 'bg-linear-to-r from-sky-400/30 via-sky-400 to-sky-400/30 p-px font-medium text-sky-300'
+                            ? 'bg-gradient-to-r from-sky-400/30 via-sky-400 to-sky-400/30 p-px font-medium dark:text-sky-300 text-sky-500'
                             : 'text-slate-500',
                         )}
                       >
                         <div
                           className={clsx(
                             'flex items-center rounded-full px-2.5',
-                            tab.isActive && 'bg-slate-800',
+                            tab.isActive && 'bg-slate-200 dark:bg-slate-800',
                           )}
                         >
                           {tab.name}
@@ -127,10 +123,13 @@ export function Hero() {
                       </div>
                     ))}
                   </div>
+
+                  {/* Code lines */}
                   <div className="mt-6 flex items-start px-1 text-sm">
+                    {/* Line numbers – use default (light) and dark: for color */}
                     <div
                       aria-hidden="true"
-                      className="border-r border-slate-300/5 pr-4 font-mono text-slate-600 select-none"
+                      className="border-r border-slate-100 pr-4 font-mono text-slate-300 select-none dark:border-slate-300/5 dark:text-slate-600"
                     >
                       {Array.from({
                         length: code.split('\n').length,
@@ -141,6 +140,7 @@ export function Hero() {
                         </Fragment>
                       ))}
                     </div>
+                    {/* Highlight block */}
                     <Highlight
                       prism={Prism}
                       code={code}
@@ -155,7 +155,12 @@ export function Hero() {
                         getTokenProps,
                       }) => (
                         <pre
-                          className={clsx('w-full px-4 pb-6', className)}
+                          className={clsx(
+                            'w-full px-4 pb-6',
+                            // Add your default text color and override for dark mode
+                            'text-slate-900 dark:text-slate-100',
+                            className,
+                          )}
                           style={style}
                         >
                           {tokens.map((line, i) => (
