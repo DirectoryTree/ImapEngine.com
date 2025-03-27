@@ -14,24 +14,24 @@ import 'prismjs/components/prism-clike'
 import 'prismjs/components/prism-markup-templating'
 
 const codeLanguage = 'php'
-const code = `use DirectoryTree\\ImapEngine\\ImapEngine;
+const code = `use DirectoryTree\\ImapEngine\\Mailbox;
 
-$imap = new ImapEngine([
+$mailbox = new Mailbox([
     'host' => 'imap.example.com',
     'port' => 993,
     'encryption' => 'ssl',
     'username' => 'user@example.com',
-    'password' => 'password'
+    'password' => 'password',
 ]);
 
-// Get messages from inbox
-$messages = $imap->folder('INBOX')->messages();
+// Get the inbox folder.
+$inbox = $mailbox->folders()->inbox();
 
-// Get a specific message
-$message = $imap->message('123');`
+// Get all messages from the inbox.
+$messages = $inbox->messages()->get();`
 
 const tabs = [
-  { name: 'example.php', isActive: true },
+  { name: 'connect.php', isActive: true },
   { name: 'composer.json', isActive: false },
 ]
 
@@ -61,7 +61,7 @@ export function Hero() {
               priority
             />
             <div className="relative">
-              <p className="inline bg-linear-to-r from-indigo-200 via-sky-400 to-indigo-200 bg-clip-text font-display text-5xl tracking-tight text-transparent">
+              <p className="inline font-display text-5xl tracking-tight text-black dark:text-white">
                 Simple IMAP for PHP
               </p>
               <p className="mt-3 text-2xl tracking-tight text-slate-400">
