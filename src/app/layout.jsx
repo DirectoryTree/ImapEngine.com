@@ -26,7 +26,7 @@ export const metadata = {
     default: 'ImapEngine - Simple IMAP API for PHP',
   },
   description:
-    'A simple, fluent API for managing IMAP mailboxes in PHP without the PHP extension.',
+    'A simple, fluent API for managing IMAP mailboxes in PHP.',
 }
 
 export default function RootLayout({ children }) {
