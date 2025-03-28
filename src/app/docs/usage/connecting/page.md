@@ -3,123 +3,102 @@ title: Connecting
 nextjs:
   metadata:
     title: Connecting to Mailboxes - ImapEngine
-    description: Learn how to connect to IMAP mailboxes using ImapEngine. Discover different connection methods including basic, OAuth, and STARTTLS connections.
+    description: Learn how to connect to IMAP mailboxes using ImapEngine
 ---
 
-ImapEngine provides a simple way to connect to IMAP mailboxes.
-
-## Basic Connection
+ImapEngine will automatically attempt connecting to the mailbox when a method is called that requires connectivity:
 
 ```php
 use DirectoryTree\ImapEngine\Mailbox;
 
 $mailbox = new Mailbox([
-    'port' => 993,
-    'username' => 'your-username',
-    'password' => 'your-password',
-    'encryption' => 'ssl',
-    'host' => 'imap.example.com',
+    // ...
 ]);
+
+// Automatically connects to the mailbox.
+$folders = $mailbox->folders()->get();
 ```
 
-## OAuth Connection
+However, if you prefer to connect manually, you may use the `connect` method.
 
-To connect using an OAuth token, pass the token as the password and set the authentication method to 'oauth':
+If connecting fails, an `ImapConnectionFailedException` exception is thrown:
 
 ```php
 use DirectoryTree\ImapEngine\Mailbox;
-
-$token = 'your-oauth-token';
+use DirectoryTree\ImapEngine\Exceptions\ImapConnectionFailedException;
 
 $mailbox = new Mailbox([
-    'port' => 993,
-    'username' => 'your-username',
-    'password' => $token,
-    'encryption' => 'ssl',
-    'authentication' => 'oauth',
-    'host' => 'imap.example.com',
+    // ...
 ]);
-```
 
-## STARTTLS Connection
-
-To connect using STARTTLS (without encryption), set the encryption option to 'starttls':
-
-```php
-use DirectoryTree\ImapEngine\Mailbox;
-
-$mailbox = new Mailbox([
-    'port' => 143,
-    'encryption' => 'starttls',
-    'username' => 'your-username',
-    'password' => 'your-password',
-    'host' => 'imap.example.com',
-]);
-```
-
-## Advanced Configuration
-
-ImapEngine supports many configuration options for fine-tuning your connection:
-
-```php
-use DirectoryTree\ImapEngine\Mailbox;
-
-$mailbox = new Mailbox([
-    'port' => 993,
-    'host' => 'imap.example.com',
-    'timeout' => 30,
-    'debug' => false,
-    'username' => 'your-username',
-    'password' => 'your-password',
-    'encryption' => 'ssl',
-    'validate_cert' => true,
-    'authentication' => 'plain',
-    'proxy' => [
-        'socket' => null,
-        'username' => null,
-        'password' => null,
-        'request_fulluri' => false,
-    ],
-]);
-```
-
-### Configuration Options
-
-| Option         | Type   | Description                                |
-| -------------- | ------ | ------------------------------------------ |
-| port           | int    | The port number to connect to              |
-| host           | string | The hostname of the IMAP server            |
-| timeout        | int    | Connection timeout in seconds              |
-| debug          | bool   | Enable debug logging                       |
-| username       | string | Your IMAP username                         |
-| password       | string | Your IMAP password or OAuth token          |
-| encryption     | string | Encryption method ('ssl' or 'starttls')    |
-| validate_cert  | bool   | Whether to validate SSL certificates       |
-| authentication | string | Authentication method ('plain' or 'oauth') |
-| proxy          | array  | Proxy configuration options                |
-
-## Debugging
-
-The `debug` configuration option controls logging behavior for the mailbox. It accepts the following values:
-
-- `false` (Default) - Disables debugging output
-- `true` - Enables debugging using an `EchoLogger`
-- `LoggerInterface` - Use a custom logger implementing PSR-3
-
-Example with custom logger:
-
-```php
-use Psr\Log\LoggerInterface;
-use DirectoryTree\ImapEngine\Mailbox;
-
-class CustomLogger implements LoggerInterface {
-    // Implement logger methods
+try {
+    $mailbox->connect();
+} catch (ImapConnectionFailedException $e) {
+    // Do something with the exception.
 }
+```
 
-$logger = new CustomLogger();
+## Checking Connection Status
 
-$mailbox = new Mailbox([
-    'debug' => $logger,
-    // ... other options
-]);
+You may check if the mailbox is currently connected via the `connected()` method:
+
+```php
+if ($mailbox->connected()) {
+    // The mailbox is connected.
+}
+```
+
+## Forcing Reconnection
+If you want to forcibly reconnect—even if you’re already connected—you can call `reconnect()`:
+
+```php
+$mailbox->reconnect();
+```
+
+This internally calls `disconnect()` and then `connect()` again.
+
+## Disconnecting
+To disconnect from the mailbox at any time, you may call `disconnect()`:
+
+```php
+$mailbox->disconnect();
+```
+
+This logs out and disconnects from the server.
+
+## Accessing the Underlying Connection
+
+If you need low-level access to the active connection, you can retrieve it via `connection()`:
+
+```php
+// DirectoryTree\ImapEngine\Connection\ImapConnection
+$connection = $mailbox->connection();
+```
+
+## Retrieving Supported Capabilities
+
+You can see which IMAP capabilities your mailbox server supports by calling `capabilities()`:
+
+```php
+// ["IMAP4rev1", "IDLE", "UIDPLUS", ...]
+$capabilities = $mailbox->capabilities();
+```
+
+## Managing Configuration
+You can retrieve the entire mailbox configuration array or specific config values using `config()`:
+
+```php
+// Get the entire config.
+$config = $mailbox->config();
+
+// Get a specific config value with a default.
+$port = $mailbox->config('port', 993);
+```
+
+This allows you to inspect or use configuration data at runtime.
+
+You may use dot-notation to access nested values:
+
+```php
+$proxyUsername = $mailbox->config('proxy.username');
 ```

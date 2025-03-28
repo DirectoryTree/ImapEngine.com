@@ -9,12 +9,11 @@ export const navigation = [
   {
     title: 'Usage',
     links: [
+      { title: 'Configuration', href: '/docs/usage/configuration' },
       { title: 'Connecting', href: '/docs/usage/connecting' },
-      { title: 'Retrieving Folders', href: '/docs/usage/retrieving-folders' },
-      { title: 'Retrieving Messages', href: '/docs/usage/retrieving-messages' },
-      { title: 'Interacting with Messages', href: '/docs/usage/interacting-with-messages' },
-      { title: 'Creating Draft Messages', href: '/docs/usage/creating-draft-messages' },
-      { title: 'Real Time Monitoring', href: '/docs/usage/real-time-monitoring' },
+      { title: 'Folders', href: '/docs/usage/folders' },
+      { title: 'Messages', href: '/docs/usage/messages' },
+      { title: 'Real Time Monitoring', href: '/docs/usage/monitoring' },
     ],
   },
-] 
+]

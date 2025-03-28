@@ -108,14 +108,14 @@ export function Hero() {
                         className={clsx(
                           'flex h-6 rounded-full',
                           tab.isActive
-                            ? 'bg-gradient-to-r from-sky-400/30 via-sky-400 to-sky-400/30 p-px font-medium dark:text-sky-300 text-sky-500'
+                            ? 'bg-gradient-to-r from-sky-400 via-sky-400 to-sky-400 dark:from-sky-400/30 dark:via-sky-400 dark:to-sky-400/30 p-px font-medium dark:text-sky-300 text-sky-500'
                             : 'text-slate-500',
                         )}
                       >
                         <div
                           className={clsx(
                             'flex items-center rounded-full px-2.5',
-                            tab.isActive && 'bg-slate-200 dark:bg-slate-800',
+                            tab.isActive && 'bg-slate-100 dark:bg-slate-800',
                           )}
                         >
                           {tab.name}

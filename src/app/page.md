@@ -48,18 +48,14 @@ $imap = new ImapEngine([
 ]);
 
 // Get all folders
-$folders = $imap->folders();
+$folders = $imap->folders()->get();
 
-// Get messages from a folder
-$messages = $imap->folder('INBOX')->messages();
+// Get the inbox folder
+$inbox = $imap->folders->inbox();
 
-// Get a specific message
-$message = $imap->message('123');
+// Get all messages in the inbox
+$messages = $inbox->messages()->get();
 ```
-
-{% callout type="warning" title="Security Note" %}
-Always use secure connections (SSL/TLS) when connecting to your IMAP server. Never store credentials in plain text.
-{% /callout %}
 
 ---
 

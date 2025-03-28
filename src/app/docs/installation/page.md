@@ -10,24 +10,12 @@ nextjs:
 
 ImapEngine requires PHP 8.1 or higher.
 
-## Installation via Composer
+## Installation
 
-The recommended way to install ImapEngine is through Composer:
+You may install ImapEngine via Composer:
 
 ```bash
 composer require directorytree/imapengine
-```
-
-## Manual Installation
-
-If you prefer to install ImapEngine manually, you can download the latest release from GitHub and include it in your project:
-
-1. Download the latest release from [GitHub](https://github.com/DirectoryTree/ImapEngine/releases)
-2. Extract the files to your project
-3. Include the autoloader in your PHP file:
-
-```php
-require_once 'path/to/imapengine/autoload.php';
 ```
 
 ## Configuration
@@ -46,4 +34,4 @@ $mailbox = new Mailbox([
 ]);
 ```
 
-For more detailed configuration options and examples, check out our [Usage Guide](/docs/usage/connecting).
+For more detailed configuration options and examples, check out the [Usage Guide](/docs/usage/connecting).
