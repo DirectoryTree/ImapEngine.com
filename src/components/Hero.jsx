@@ -24,10 +24,8 @@ $mailbox = new Mailbox([
     'password' => 'password',
 ]);
 
-// Get the inbox folder.
 $inbox = $mailbox->folders()->inbox();
 
-// Get all messages from the inbox.
 $messages = $inbox->messages()->get();`
 
 const tabs = [
