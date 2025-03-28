@@ -84,9 +84,9 @@ Need help with ImapEngine? Here are some resources:
 ### Documentation
 
 - [Installation Guide](/docs/installation)
-- [Connecting to IMAP](/docs/connecting)
-- [Working with Messages](/docs/retrieving-messages)
-- [Real-time Monitoring](/docs/real-time-monitoring)
+- [Connecting to IMAP](/docs/usage/connecting)
+- [Working with Messages](/docs/usage/messages)
+- [Real-time Monitoring](/docs/usage/monitoring)
 
 ### Support
 

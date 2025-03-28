@@ -139,7 +139,7 @@ $mailbox = new Mailbox([
 
 If provided with a fully-qualified class name (and the class exists), an instance of that logger will be created and used.
 
-The class must implement `DirectoryTree\ImapEngine\Connection\Loggers\LoggerInterface`. 
+The class must implement `LoggerInterface`. 
 
 ```php
 namespace App\Loggers;
