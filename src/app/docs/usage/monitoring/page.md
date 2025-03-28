@@ -25,7 +25,8 @@ $inbox->idle(function (Message $message) {
 ```
 
 {% callout type="warning" title="Important" %}
-The `idle()` method is fully blocking (as in, it enters an infinite loop), so consider running it in a background process or a worker when used in a web application.
+The `idle()` method is fully blocking. This means it enters an infinite loop when called. 
+Consider running it in a background process or a worker when used in a web application.
 {% /callout %}
 
 ## Fetching Message Content
@@ -48,7 +49,7 @@ $inbox->idle(function (Message $message) {
 ```
 
 {% callout type="warning" title="Important" %}
-You must return the `MessageQuery` from the callback.
+You must return the `MessageQuery` instance in the callback.
 {% /callout %}
 
 ## Custom Timeouts

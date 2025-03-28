@@ -6,7 +6,7 @@ nextjs:
     description: Learn how to retrieve and interact with email messages using ImapEngine
 ---
 
-ImapEngine provides a rich set of methods to interact with email messages, allowing users to efficiently manage their email workflow.
+ImapEngine provides a rich set of methods to interact with email messages, allowing you to efficiently manage your mailbox.
 
 ## Retrieving and Searching for Messages
 
@@ -41,9 +41,10 @@ Use `withFlags()` to retrieve flags, or `withoutFlags()` to omit them.
 
 Use `withBody()` to fetch the full body content, or `withoutBody()` to skip it.
 
-> [!important]
-> The `withBody()` method fetches the full body content of the message, including attachments.
-> Keep this in mind when fetching messages, as it can be slow for large messages.
+{% callout type="warning" title="Important" %}
+The `withBody()` method fetches the full body content of the message, including attachments.
+Keep this in mind when fetching messages, as it can be slow for large messages.
+{% /callout %}
 
 For example, to fetch messages with both their bodies, headers, and flags:
 
@@ -63,10 +64,11 @@ Use `withHeaders()` to include headers in the result, or `withoutHeaders()` to e
 
 You may paginate messages using the `paginate()` method. This method accepts the number of messages to display per page:
 
-> [!important]
-> IMAP does not support native pagination, as you would typically expect, like a SQL database. Instead,
-> ImapEngine retrieves all UID's from the selected folder, takes the slice of the UID's  that
-> corresponds to the current page, and fetches the requested email message parts specifically for those UID's.
+{% callout type="warning" title="Important" %}
+IMAP does not support native pagination as you would typically expect like a SQL database. Instead,
+ImapEngine retrieves all UID's from the selected folder, takes the slice of the UID's  that
+corresponds to the current page, and fetches the requested email message parts specifically for those UID's.
+{% /callout %}
 
 ```php
 // Paginate messages with 10 messages per page.
@@ -206,9 +208,10 @@ For each attachment, you may access the following properties:
 - `$attachment->contentType(): string`: Retrieve the attachment's content type.
 - `$attachment->contentStream(): StreamInterface`: Retrieve the attachment's contents as a stream.
 
-> [!important]
-> The attachment's content type is determined by the `Content-Type` header provided in the email, and may not always be accurate.
-> If `application/octet-stream` is returned, using [`mime_content_type()`](https://www.php.net/manual/en/function.mime-content-type.php) over the filename or contents may be used to clarify the type.
+{% callout type="warning" title="Important" %}
+The attachment's content type is determined by the `Content-Type` header provided in the email, and may not always be accurate.
+If `application/octet-stream` is returned from the `contentType` method, using [`mime_content_type()`](https://www.php.net/manual/en/function.mime-content-type.php) with the filename or contents may be used to clarify the type.
+{% /callout %}
 
 #### Flag Operations
 

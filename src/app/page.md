@@ -10,9 +10,9 @@ A simple, fluent API for managing IMAP mailboxes in PHP without the PHP extensio
 
 {% quick-link title="Connecting" icon="presets" href="/docs/usage/connecting" description="Learn how to connect to your IMAP server." /%}
 
-{% quick-link title="Retrieving Messages" icon="plugins" href="/docs/usage/retrieving-messages" description="Learn how to retrieve and work with email messages." /%}
+{% quick-link title="Retrieving Messages" icon="plugins" href="/docs/usage/messages" description="Learn how to retrieve and work with email messages." /%}
 
-{% quick-link title="Real Time Monitoring" icon="theming" href="/docs/usage/real-time-monitoring" description="Monitor your mailbox in real-time for new messages." /%}
+{% quick-link title="Real Time Monitoring" icon="theming" href="/docs/usage/monitoring" description="Monitor your mailbox in real-time for new messages." /%}
 
 {% /quick-links %}
 
@@ -91,4 +91,3 @@ Need help with ImapEngine? Here are some resources:
 ### Support
 
 - [GitHub Issues](https://github.com/DirectoryTree/ImapEngine/issues)
-- [GitHub Discussions](https://github.com/DirectoryTree/ImapEngine/discussions)
