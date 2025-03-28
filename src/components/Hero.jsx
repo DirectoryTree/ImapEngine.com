@@ -24,7 +24,7 @@ $mailbox = new Mailbox([
     'password' => 'password',
 ]);
 
-$inbox = $mailbox->folders()->inbox();
+$inbox = $mailbox->inbox();
 
 $messages = $inbox->messages()->get();`
 
