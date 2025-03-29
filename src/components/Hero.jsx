@@ -156,7 +156,7 @@ export function Hero() {
                           className={clsx(
                             'w-full px-4 pb-6',
                             // Add your default text color and override for dark mode
-                            'text-slate-900 dark:text-slate-100',
+                            'text-slate-900 dark:text-slate-100 overflow-hidden',
                             className,
                           )}
                           style={style}
