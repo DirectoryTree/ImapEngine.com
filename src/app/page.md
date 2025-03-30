@@ -37,9 +37,9 @@ composer require directorytree/imapengine
 Here's a simple example of how to use ImapEngine:
 
 ```php
-use DirectoryTree\ImapEngine\ImapEngine;
+use DirectoryTree\ImapEngine\Mailbox;
 
-$imap = new ImapEngine([
+$mailbox = new Mailbox([
     'host' => 'imap.example.com',
     'port' => 993,
     'encryption' => 'ssl',
@@ -47,14 +47,17 @@ $imap = new ImapEngine([
     'password' => 'password'
 ]);
 
-// Get all folders
-$folders = $imap->folders()->get();
-
 // Get the inbox folder
-$inbox = $imap->folders->inbox();
+$inbox = $mailbox->inbox();
 
 // Get all messages in the inbox
-$messages = $inbox->messages()->get();
+$messages = $inbox->messages()
+    ->withHeaders()
+    ->get();
+
+foreach ($messages as $message) {
+    echo $message->from()->email();
+}
 ```
 
 ---
