@@ -2,7 +2,7 @@
 title: ImapEngine
 ---
 
-A simple, fluent API for managing IMAP mailboxes in PHP without the PHP extension. {% .lead %}
+A simple, fluent API for managing IMAP mailboxes in PHP. {% .lead %}
 
 {% quick-links %}
 
@@ -15,8 +15,6 @@ A simple, fluent API for managing IMAP mailboxes in PHP without the PHP extensio
 {% quick-link title="Real Time Monitoring" icon="theming" href="/docs/usage/monitoring" description="Monitor your mailbox in real-time for new messages." /%}
 
 {% /quick-links %}
-
-ImapEngine provides a simple, fluent API for managing IMAP mailboxes in PHP without requiring the PHP IMAP extension. It's perfect for applications that need to interact with email servers but can't or don't want to use the PHP IMAP extension.
 
 ---
 
