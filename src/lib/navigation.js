@@ -13,6 +13,7 @@ export const navigation = [
       { title: 'Connecting', href: '/docs/usage/connecting' },
       { title: 'Folders', href: '/docs/usage/folders' },
       { title: 'Messages', href: '/docs/usage/messages' },
+      { title: 'Mbox Parsing', href: '/docs/usage/mbox' },
       { title: 'Real Time Monitoring', href: '/docs/usage/monitoring' },
     ],
   },
