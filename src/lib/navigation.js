@@ -17,4 +17,12 @@ export const navigation = [
       { title: 'Real Time Monitoring', href: '/docs/usage/monitoring' },
     ],
   },
+  {
+    title: 'Laravel',
+    links: [
+      { title: 'Introduction', href: '/docs/laravel/introduction' },
+      { title: 'Installation', href: '/docs/laravel/installation' },
+      { title: 'Usage', href: '/docs/laravel/usage' },
+    ],
+  }
 ]
