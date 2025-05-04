@@ -10,7 +10,6 @@ The Laravel package for ImapEngine provides seamless integration with your Larav
 
 This package offers a clean, Laravel-style interface to ImapEngine's functionality, including:
 
-- A service provider for easy registration
 - A facade for convenient access
 - Laravel-specific configuration
 - Artisan command for mailbox monitoring
