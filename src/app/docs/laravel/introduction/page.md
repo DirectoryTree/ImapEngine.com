@@ -1,5 +1,5 @@
 ---
-title: Laravel Introduction
+title: Introduction
 nextjs:
   metadata:
     title: Laravel Integration - ImapEngine

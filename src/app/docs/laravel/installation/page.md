@@ -1,5 +1,5 @@
 ---
-title: Laravel Installation
+title: Installation
 nextjs:
   metadata:
     title: Laravel Installation - ImapEngine
