@@ -1,5 +1,5 @@
 ---
-title: Usage
+title: Laravel Usage
 nextjs:
   metadata:
     title: Laravel Usage - ImapEngine
@@ -126,12 +126,12 @@ class HandleNewEmail
     public function handle(MessageReceived $event): void
     {
         $message = $event->message;
-        
+
         // Access message properties
         $subject = $message->subject();
         $from = $message->from();
         $body = $message->body();
-        
+
         // Process the message...
     }
 }
@@ -211,12 +211,12 @@ use DirectoryTree\ImapEngine\Laravel\ImapManager;
 class EmailService
 {
     protected $manager;
-    
+
     public function __construct(ImapManager $manager)
     {
         $this->manager = $manager;
     }
-    
+
     public function getMailbox($name)
     {
         return $this->manager->mailbox($name);

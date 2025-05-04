@@ -1,5 +1,5 @@
 ---
-title: Installation
+title: Laravel Installation
 nextjs:
   metadata:
     title: Laravel Installation - ImapEngine
@@ -25,9 +25,6 @@ composer require directorytree/imapengine-laravel
 
 After installation, you should publish the package configuration file using the `vendor:publish` Artisan command:
 
-```bash
-php artisan vendor:publish --provider="DirectoryTree\ImapEngine\Laravel\ImapServiceProvider"
-```
 
 This will create a `config/imap.php` configuration file in your application.
 
@@ -41,7 +38,7 @@ return [
         'default' => [
             // ...
         ],
-        
+
         // You can define additional mailboxes here
         // 'work' => [
         //     'port' => env('WORK_IMAP_PORT', 993),
@@ -54,9 +51,10 @@ return [
 
 ## Environment Variables
 
-If you application only interacts with one mailbox, you may configure it in your `.env` file:
+If you application only interacts with one mailbox, you 
+may configure it in your `.env` file:
 
-```
+```dotenv
 IMAP_HOST=imap.example.com
 IMAP_PORT=993
 IMAP_USERNAME=your-username
@@ -66,5 +64,4 @@ IMAP_ENCRYPTION=ssl
 
 ## Next Steps
 
-Now that you've installed and configured the ImapEngine Laravel package, check out the
-[Usage Guide](/docs/laravel/usage) to learn how to use it in your Laravel application.
+Now that you've installed and configured the ImapEngine Laravel package, check out the [Usage Guide](/docs/laravel/usage) to learn how to use it in your Laravel application.

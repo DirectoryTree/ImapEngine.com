@@ -21,6 +21,7 @@ const lexend = localFont({
 })
 
 export const metadata = {
+  metadataBase: new URL('https://imapengine.com'),
   title: {
     template: '%s - ImapEngine',
     default: 'ImapEngine - Simple IMAP API for PHP',
