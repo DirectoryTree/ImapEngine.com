@@ -158,8 +158,8 @@ When needing to test retrieving mail from a mailbox in your application, you may
 When `fake` is called, a test mailbox instance will be inserted into the container, overriding the default mailbox instance.
 
 {% callout type="warning" title="Important" %}
-You should type-hint against ImapEngine's interfaces and not the concrete classes, so
-that your application is compatible with whichever instance is registered in the container.
+You should type-hint against ImapEngine's interfaces and not the concrete classes, 
+so your application is compatible with whichever instance is registered in the container.
 {% /callout %}
 
 ```php
