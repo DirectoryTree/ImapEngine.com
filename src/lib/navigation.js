@@ -15,6 +15,7 @@ export const navigation = [
       { title: 'Messages', href: '/docs/usage/messages' },
       { title: 'Mbox Parsing', href: '/docs/usage/mbox' },
       { title: 'Real Time Monitoring', href: '/docs/usage/monitoring' },
+      { title: 'Testing', href: '/docs/usage/testing' },
     ],
   },
   {
