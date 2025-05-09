@@ -153,75 +153,69 @@ The ImapEngine Laravel package includes testing helpers to make it easy to test 
 
 ### Faking a Mailbox
 
-You can fake a mailbox for testing:
+When needing to test retrieving mail from a mailbox in your application, you may use `fake` method on the `Imap` facade to create a fake mailbox instance.
+
+When `fake` is called, a test mailbox instance will be inserted into the container, overriding the default mailbox instance.
+
+{% callout type="warning" title="Important" %}
+You should type-hint against ImapEngine's interfaces and not the concrete classes, so
+that your application is compatible with whichever instance is registered in the container.
+{% /callout %}
 
 ```php
+use DirectoryTree\ImapEngine\Testing\FakeFolder;
+use DirectoryTree\ImapEngine\Testing\FakeMailbox;
 use DirectoryTree\ImapEngine\Laravel\Facades\Imap;
+
+// Fake the default mailbox
+$mailbox = Imap::fake(
+    mailbox: 'default',
+    config: ['host' => 'imap.example.com', ...],
+    folders: [new FakeFolder('inbox'), new FakeFolder('sent')],
+);
+
+$inbox = $mailbox->inbox();
+
+// Add a fake message to the folder
+$inbox->addMessage(
+    new FakeMessage(
+        uid: 1,
+        flags: ['\Seen'],
+        contents: 'Hello, world.',
+    )
+);
+
+// Assert that the message is present
+$this->get(route('mailbox.messages.index', [
+    'mailbox' => 'default',
+    'folder' => 'inbox',
+]))->assertSee('Hello, world.');
+```
+
+You may also add fake messages directly into the `FakeFolder` constructor using the `messages` parameter:
+
+```php
 use DirectoryTree\ImapEngine\Testing\FakeFolder;
 use DirectoryTree\ImapEngine\Testing\FakeMessage;
 
-// Fake the default mailbox
-$fake = Imap::fake('default');
-
-// Add a fake folder
-$folder = $fake->addFolder(new FakeFolder('INBOX'));
-
-// Add a fake message to the folder
-$folder->addMessage(
-    new FakeMessage([
-        'uid' => 1,
-        'subject' => 'Test Subject',
-        'from' => 'sender@example.com',
-        'to' => 'recipient@example.com',
-        'body' => 'This is a test message',
-    ])
+$inbox = new FakeFolder(
+    path: 'inbox',
+    flags: ['\\Inbox'],
+    messages: [
+        new FakeMessage(1, ['\\Seen'], 'Message content'),
+        new FakeMessage(2, ['\\Flagged'], 'Another message content'),
+    ],
 );
-
-// Now you can use the mailbox in your tests
-$mailbox = Imap::mailbox('default');
-$inbox = $mailbox->inbox();
-$messages = $inbox->messages()->get();
-
-// Assert that there is one message
-$this->assertCount(1, $messages);
 ```
 
-### Faking Capabilities
-
-You can also fake mailbox capabilities:
+You may also fake mailbox capabilities using the `capabilities` parameter:
 
 ```php
-// Fake the mailbox with specific capabilities
-$fake = Imap::fake('default', [], [], ['IMAP4rev1', 'IDLE', 'UIDPLUS']);
+$fake = Imap::fake('default', capabilities: ['IMAP4rev1', 'IDLE', 'UIDPLUS']);
 
-// Check if a capability is supported
 $mailbox = Imap::mailbox('default');
+
 $this->assertTrue($mailbox->hasCapability('IDLE'));
-```
-
-## Advanced Usage
-
-### Accessing the ImapManager
-
-If you need more control, you can inject the `ImapManager` class:
-
-```php
-use DirectoryTree\ImapEngine\Laravel\ImapManager;
-
-class EmailService
-{
-    protected $manager;
-
-    public function __construct(ImapManager $manager)
-    {
-        $this->manager = $manager;
-    }
-
-    public function getMailbox($name)
-    {
-        return $this->manager->mailbox($name);
-    }
-}
 ```
 
 ### Building Custom Mailboxes
@@ -263,4 +257,4 @@ You can remove a mailbox from the in-memory cache:
 Imap::forget('default');
 ```
 
-This is useful when you want to force the manager to create a fresh instance on the next access.
+This is useful when you want to force the manager to create a fresh instance of the mailbox the next time it's accessed.
