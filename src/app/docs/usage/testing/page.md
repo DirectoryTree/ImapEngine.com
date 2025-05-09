@@ -27,8 +27,8 @@ These classes allow you to create a complete mock of an IMAP mailbox system for 
 To create a fake mailbox for testing, instantiate the `FakeMailbox` class:
 
 ```php
-use DirectoryTree\ImapEngine\Testing\FakeMailbox;
 use DirectoryTree\ImapEngine\Testing\FakeFolder;
+use DirectoryTree\ImapEngine\Testing\FakeMailbox;
 use DirectoryTree\ImapEngine\Testing\FakeMessage;
 
 // Create a fake mailbox with configuration
@@ -85,8 +85,8 @@ Here's an example of how to use ImapEngine's testing utilities with PHPUnit:
 
 ```php
 use PHPUnit\Framework\TestCase;
-use DirectoryTree\ImapEngine\Testing\FakeMailbox;
 use DirectoryTree\ImapEngine\Testing\FakeFolder;
+use DirectoryTree\ImapEngine\Testing\FakeMailbox;
 use DirectoryTree\ImapEngine\Testing\FakeMessage;
 
 class EmailProcessorTest extends TestCase
@@ -113,7 +113,7 @@ class EmailProcessorTest extends TestCase
         );
     }
     
-    public function testProcessNewEmails()
+    public function testProcessNewEmails(): void
     {
         // Get the inbox folder
         $inbox = $this->mailbox->inbox();
@@ -137,7 +137,7 @@ class EmailProcessorTest extends TestCase
 You can test various message operations using the fake implementations:
 
 ```php
-public function testMarkingMessagesAsRead()
+public function testMarkingMessagesAsRead(): void
 {
     // Get the inbox folder
     $inbox = $this->mailbox->inbox();
@@ -170,7 +170,7 @@ public function testMarkingMessagesAsRead()
 You can also test folder operations:
 
 ```php
-public function testCreatingFolders()
+public function testCreatingFolders(): void
 {
     // Create a new folder
     $folder = $this->mailbox->folders()->create('Archive');
@@ -194,10 +194,10 @@ public function testCreatingFolders()
 
 ## Testing Message Queries
 
-You can test message queries and filters:
+You can test message queries and operations:
 
 ```php
-public function testMessageQueries()
+public function testMessageQueries(): void
 {
     // Get the inbox folder
     $inbox = $this->mailbox->inbox();
@@ -227,23 +227,26 @@ public function testMessageQueries()
 If your application uses dependency injection, you can inject the fake implementations in your tests:
 
 ```php
+use DirectoryTree\ImapEngine\MailboxInterface;
+use DirectoryTree\ImapEngine\Collections\MessageCollection;
+
 class EmailService
 {
     public function __construct(
         protected MailboxInterface $mailbox
     ) {}
     
-    public function getUnreadEmails()
+    public function messages(): MessageCollection
     {
-        return $this->mailbox->inbox()->messages()->get()->filter(
-            fn ($message) => !$message->isSeen()
-        );
+        return $this->mailbox->inbox()->messages()->get();
     }
 }
+```
 
+```php
 class EmailServiceTest extends TestCase
 {
-    public function testGetUnreadEmails()
+    public function testMessages(): void
     {
         // Create a fake mailbox
         $mailbox = new FakeMailbox(
@@ -262,7 +265,7 @@ class EmailServiceTest extends TestCase
         $service = new EmailService($mailbox);
         
         // Test the method
-        $unreadEmails = $service->getUnreadEmails();
+        $unreadEmails = $service->messages();
         
         // Assert we only get the unread email
         $this->assertCount(1, $unreadEmails);
