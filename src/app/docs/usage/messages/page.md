@@ -121,7 +121,13 @@ $message = $inbox->messages()->find(1, ImapFetchIdentifier::MessageNumber);
 You may also use the `findOrFail()` method to throw an exception if the message is not found:
 
 ```php
-$message = $inbox->messages()->findOrFail(12345, ImapFetchIdentifier::Uid);
+use DirectoryTree\ImapEngine\Exceptions\MessageNotFoundException;
+
+try {
+    $message = $inbox->messages()->findOrFail(12345, ImapFetchIdentifier::Uid);
+} catch (MessageNotFoundException $e) {
+    // Handle message not found.
+}
 ```
 
 ### Interacting With Messages

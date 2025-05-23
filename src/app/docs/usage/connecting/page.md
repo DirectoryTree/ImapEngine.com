@@ -25,7 +25,8 @@ If connecting fails, an `ImapConnectionFailedException` exception is thrown:
 
 ```php
 use DirectoryTree\ImapEngine\Mailbox;
-use DirectoryTree\ImapEngine\Exceptions\ImapConnectionFailedException;
+use DirectoryTree\ImapEngine\Exceptions\ImapCommandException;
+use DirectoryTree\ImapEngine\Exceptions\ImapConnectionException;
 
 $mailbox = new Mailbox([
     // ...
@@ -33,8 +34,10 @@ $mailbox = new Mailbox([
 
 try {
     $mailbox->connect();
+} catch (ImapCommandException $e) {
+    // Handle authentication failures (invalid credentials).
 } catch (ImapConnectionFailedException $e) {
-    // Do something with the exception.
+    // Handle connection failures (network, server issues).
 }
 ```
 
