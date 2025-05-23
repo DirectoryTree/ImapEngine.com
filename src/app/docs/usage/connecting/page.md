@@ -21,7 +21,9 @@ $folders = $mailbox->folders()->get();
 
 However, if you prefer to connect manually, you may use the `connect` method.
 
-If connecting fails, an `ImapConnectionFailedException` exception is thrown:
+If connecting fails, an `ImapConnectionException` exception is thrown.
+
+If authentication fails, an `ImapCommandException` exception is thrown.
 
 ```php
 use DirectoryTree\ImapEngine\Mailbox;
@@ -36,7 +38,7 @@ try {
     $mailbox->connect();
 } catch (ImapCommandException $e) {
     // Handle authentication failures (invalid credentials).
-} catch (ImapConnectionFailedException $e) {
+} catch (ImapConnectionException $e) {
     // Handle connection failures (network, server issues).
 }
 ```
