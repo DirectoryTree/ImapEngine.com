@@ -19,6 +19,11 @@ $messages = $inbox->messages()
     ->get();
 ```
 
+{% callout type="warning" title="Important" %}
+While the `since()` method accepts a datetime instance, it does not filter
+by time -- only by date. [IMAP does not support time-based filtering](https://datatracker.ietf.org/doc/html/rfc9051#section-6.4.4-15.43).
+{% /callout %}
+
 If a method doesn't exist for a specific search criteria, you may use the `where()` method to add custom criteria:
 
 ```php
