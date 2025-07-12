@@ -248,10 +248,10 @@ All these methods work by invoking the underlying IMAP `STORE` command (with the
 
 Beyond just flagging, you may move or copy messages between folders, as well as delete them:
 
-- `$message->restore(): void`: Restores the message from the trash.
+- `$message->restore(): void`: Unmarks the message as deleted.
 - `$message->copy(string $folder): void`: Copies the message to the specified folder.
 - `$message->move(string $folder, bool $expunge = false): void`: Moves the message to the specified folder.
-- `$message->delete(bool $expunge = false): void`: Marks the message as deleted and, if desired, expunges it from the folder.
+- `$message->delete(bool $expunge = false): void`: Marks the message as deleted and expunges it immediately from the folder (if `$expunge` is `true`).
 
 #### Example: Interacting with a Retrieved Message
 
