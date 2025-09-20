@@ -68,11 +68,11 @@ Once you have a `Folder` instance, you may retrieve various properties:
 ```php
 $folder = $mailbox->folders()->find('Inbox');
 
-// Get the full folder path (e.g. "Inbox/Archive").
-$attributes = $folder->path();
-
 // Get the root folder name (excluding parent folders, e.g. "Inbox").
 $name = $folder->name();
+
+// Get the full folder path (e.g. "Inbox/Archive").
+$path = $folder->path();
 
 // Get the folder delimiter (e.g. "/").
 $delimiter = $folder->delimiter();
@@ -133,6 +133,29 @@ $status = $folder->status(); // array
 
 This data includes various IMAP-defined keys (e.g. `MESSAGES`, `RECENT`, `UIDNEXT`, etc.).
 
+## Retrieving Folder Quotas
+
+If your IMAP server exposes storage limits, you may inspect them through the `quota()` method:
+
+```php
+$quotas = $folder->quota(); // array
+```
+
+Each entry is keyed by the quota root (for example, `"ROOT"`), followed by quota resources such as `STORAGE` or `MESSAGE`. The `usage` value represents the current consumption, while `limit` describes the maximum allocation reported by the server:
+
+```php
+[
+    'ROOT' => [
+        'STORAGE' => [
+            'usage' => 42,   // Current usage in kilobytes.
+            'limit' => 1024, // Maximum storage limit in kilobytes.
+        ],
+    ],
+]
+```
+
+ImapEngine will throw an exception if the connected server does not advertise the `QUOTA` capability.
+
 ## Examining a Folder
 
 Examining a folder retrieves additional details in a read-only manner:
@@ -179,4 +202,3 @@ $message = $inbox->messages()->first();
 // Immediately delete and expunge the message.
 $message->delete(expunge: true);
 ```
-
