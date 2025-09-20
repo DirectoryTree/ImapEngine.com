@@ -123,6 +123,20 @@ $folder->select(true);
 
 Selecting a folder tells the server that you want to work with the messages within that folder.
 
+## Checking Folder Capabilities
+
+To inspect the IMAP capabilities advertised while working with a folder, call `capabilities()`:
+
+```php
+$capabilities = $folder->capabilities(); // array
+
+if (in_array('IDLE', $capabilities, strict: true)) {
+    // Server supports IDLE for this mailbox.
+}
+```
+
+This method proxies to the mailbox's capability list, letting you verify support for features like `IDLE`, `MOVE`, or `QUOTA` without leaving the folder API.
+
 ## Checking Folder Status
 
 You may retrieve status information for a folder, such as the number of messages, recent messages, and unseen messages:
