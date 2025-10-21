@@ -190,7 +190,7 @@ When a folder is expunged, the IMAP server removes all messages marked for delet
 use DirectoryTree\ImapEngine\Message;
 
 // Get the inbox folder.
-$inbox = $mailbox->folders()->inbox();
+$inbox = $mailbox->inbox();
 
 // Get all messages in the inbox.
 $messages = $inbox->messages()->get();
