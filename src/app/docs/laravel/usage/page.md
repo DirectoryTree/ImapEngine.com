@@ -141,8 +141,8 @@ Register your listener in your `EventServiceProvider`:
 
 ```php
 protected $listen = [
-    'DirectoryTree\ImapEngine\Laravel\Events\MessageReceived' => [
-        'App\Listeners\HandleNewEmail',
+    \DirectoryTree\ImapEngine\Laravel\Events\MessageReceived::class => [
+        \App\Listeners\HandleNewEmail::class,
     ],
 ];
 ```
