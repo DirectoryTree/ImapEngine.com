@@ -65,6 +65,20 @@ $messages = $inbox->messages()
 
 Use `withHeaders()` to include headers in the result, or `withoutHeaders()` to exclude them.
 
+**Message Body Structure:**
+
+Use `withBodyStructure()` to fetch the MIME structure of messages, or `withoutBodyStructure()` to skip it.
+
+```php
+$messages = $inbox->messages()
+    ->withBodyStructure()
+    ->get();
+```
+
+{% callout type="note" title="Performance Tip" %}
+Fetching body structure is much more efficient than fetching the full message body when you only need to inspect the message's MIME structure, parts, or attachments metadata without downloading the actual content.
+{% /callout %}
+
 #### Message Pagination
 
 You may paginate messages using the `paginate()` method. This method accepts the number of messages to display per page:
@@ -202,6 +216,198 @@ For accessing the message content in different formats:
 
 - `$message->html(): string`: Retrieve the HTML version of the message (if available).
 - `$message->text(): string`: Retrieve the plain text version of the message (if available).
+
+#### Body Structure
+
+ImapEngine provides powerful methods to inspect the MIME structure of messages without downloading the full message body. This is particularly useful for:
+
+- Inspecting message parts and their content types
+- Identifying attachments and their metadata (filename, size, encoding)
+- Determining if a message has HTML or plain text parts
+- Fetching specific message parts by their part number
+
+**Fetching Body Structure**
+
+To access the body structure, you must first fetch it using `withBodyStructure()`:
+
+```php
+$messages = $inbox->messages()
+    ->withBodyStructure()
+    ->get();
+
+foreach ($messages as $message) {
+    if ($message->hasBodyStructure()) {
+        $structure = $message->bodyStructure();
+    }
+}
+```
+
+**Understanding Body Structure**
+
+The body structure is represented as either:
+- A `BodyStructureCollection` for multipart messages (e.g., messages with both HTML and plain text, or messages with attachments)
+- A single `BodyStructurePart` wrapped in a collection for simple messages
+
+**Working with Multipart Messages**
+
+For multipart messages, you can access various properties:
+
+```php
+$structure = $message->bodyStructure();
+
+// Get the multipart subtype (e.g., "mixed", "alternative", "related")
+$structure->subtype(); // "alternative"
+
+// Get the content type
+$structure->contentType(); // "multipart/alternative"
+
+// Get the boundary parameter
+$structure->boundary(); // "Aq14h3UL"
+
+// Get all parameters
+$structure->parameters(); // ['boundary' => 'Aq14h3UL']
+
+// Get direct child parts
+$structure->parts(); // Array of BodyStructurePart or BodyStructureCollection
+
+// Count the number of parts
+$structure->count(); // 2
+```
+
+**Accessing Message Parts**
+
+You can access specific parts of the message structure:
+
+```php
+// Get all parts flattened (including nested parts)
+$allParts = $structure->flatten();
+
+// Find a specific part by part number
+$part = $structure->find('1.2');
+
+// Get the text/plain part
+$textPart = $structure->text();
+
+// Get the text/html part
+$htmlPart = $structure->html();
+```
+
+**Working with Individual Parts**
+
+Each `BodyStructurePart` provides detailed information about a message part:
+
+```php
+$part = $structure->text();
+
+// Get the part number (e.g., "1", "1.2", "2.1.3")
+$part->partNumber(); // "1"
+
+// Get the MIME type and subtype
+$part->type(); // "text"
+$part->subtype(); // "plain"
+$part->contentType(); // "text/plain"
+
+// Get parameters (e.g., charset)
+$part->parameters(); // ['charset' => 'utf-8']
+$part->parameter('charset'); // "utf-8"
+$part->charset(); // "utf-8"
+
+// Get encoding and size
+$part->encoding(); // "quoted-printable"
+$part->size(); // 1024 (bytes)
+$part->lines(); // 50 (for text parts)
+
+// Get content ID and description
+$part->id(); // "<part1@example.com>"
+$part->description(); // "Message body"
+
+// Check part type
+$part->isText(); // true
+$part->isHtml(); // false
+$part->isAttachment(); // false
+$part->isInline(); // false
+```
+
+**Inspecting Attachments**
+
+Body structure makes it easy to identify and inspect attachments without downloading them:
+
+```php
+// Get all attachment parts
+$attachments = $structure->attachments();
+
+// Check if message has attachments
+if ($structure->hasAttachments()) {
+    // Get attachment count
+    $count = $structure->attachmentCount();
+
+    foreach ($attachments as $attachment) {
+        // Get attachment metadata
+        $attachment->filename(); // "document.pdf"
+        $attachment->contentType(); // "application/pdf"
+        $attachment->size(); // 50000 (bytes)
+        $attachment->encoding(); // "base64"
+
+        // Get disposition information
+        $disposition = $attachment->disposition();
+        $disposition->type(); // ContentDispositionType::Attachment
+        $disposition->isAttachment(); // true
+        $disposition->isInline(); // false
+        $disposition->parameters(); // ['filename' => 'document.pdf']
+    }
+}
+```
+
+**Fetching Specific Body Parts**
+
+Once you know the part number from the body structure, you can fetch that specific part's content:
+
+```php
+// Fetch a specific body part by part number (without marking the message as seen)
+$partContent = $message->bodyPart('1.2');
+
+// Fetch a specific body part by part number (marking the message as seen)
+$partContent = $message->bodyPart('1.2', peek: false);
+```
+
+This is useful for:
+- Downloading only the HTML or text version of a message
+- Selectively loading message content based on the structure
+- Fetching individual attachments without downloading the entire message
+
+**Example: Processing Messages with Body Structure**
+
+```php
+$messages = $inbox->messages()
+    ->withBodyStructure()
+    ->get();
+
+foreach ($messages as $message) {
+    $structure = $message->bodyStructure();
+
+    // Check if message has attachments
+    if ($structure->hasAttachments()) {
+        echo "Message has {$structure->attachmentCount()} attachment(s)\n";
+
+        foreach ($structure->attachments() as $attachment) {
+            echo "- {$attachment->filename()} ({$attachment->size()} bytes)\n";
+
+            // Fetch only this attachment's content
+            $content = $message->bodyPart($attachment->partNumber());
+        }
+    }
+
+    // Get the HTML version if available
+    if ($htmlPart = $structure->html()) {
+        $htmlContent = $message->bodyPart($htmlPart->partNumber());
+    }
+
+    // Get the plain text version if available
+    if ($textPart = $structure->text()) {
+        $textContent = $message->bodyPart($textPart->partNumber());
+    }
+}
+```
 
 #### Attachment Handling
 
