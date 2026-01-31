@@ -79,6 +79,65 @@ $messages = $inbox->messages()
 Fetching body structure is much more efficient than fetching the full message body when you only need to inspect the message's MIME structure, parts, or attachments metadata without downloading the actual content.
 {% /callout %}
 
+#### Server-Side Sorting
+
+ImapEngine supports server-side sorting using the [RFC 5256 SORT extension](https://datatracker.ietf.org/doc/html/rfc5256). This allows you to sort messages directly on the IMAP server, which is more efficient than fetching all messages and sorting them locally.
+
+```php
+use DirectoryTree\ImapEngine\Enums\ImapSortKey;
+
+// Sort messages by date (ascending)
+$messages = $inbox->messages()->sortBy('date')->get();
+
+// Sort messages by date (descending)
+$messages = $inbox->messages()->sortBy('date', 'desc')->get();
+
+// Or use the sortByDesc helper
+$messages = $inbox->messages()->sortByDesc('date')->get();
+```
+
+You can also use the `ImapSortKey` enum for type-safe sort keys:
+
+```php
+use DirectoryTree\ImapEngine\Enums\ImapSortKey;
+
+$messages = $inbox->messages()->sortBy(ImapSortKey::Subject)->get();
+```
+
+**Available Sort Keys:**
+
+| Key | Description |
+|-----|-------------|
+| `date` | Sort by the Date header |
+| `arrival` | Sort by the arrival time (when the message was received) |
+| `from` | Sort by the From header |
+| `to` | Sort by the To header |
+| `cc` | Sort by the CC header |
+| `subject` | Sort by the Subject header |
+| `size` | Sort by the message size |
+
+**Combining with Search Criteria:**
+
+Server-side sorting works seamlessly with search criteria:
+
+```php
+// Get unread messages sorted by arrival time (newest first)
+$messages = $inbox->messages()
+    ->unseen()
+    ->sortByDesc('arrival')
+    ->get();
+
+// Get messages from a sender sorted by subject
+$messages = $inbox->messages()
+    ->from('newsletter@example.com')
+    ->sortBy('subject')
+    ->get();
+```
+
+{% callout type="warning" title="Server Support Required" %}
+Server-side sorting requires the IMAP server to support the SORT capability (RFC 5256). If the server does not support this capability, an `ImapCapabilityException` will be thrown.
+{% /callout %}
+
 #### Message Pagination
 
 You may paginate messages using the `paginate()` method. This method accepts the number of messages to display per page:
