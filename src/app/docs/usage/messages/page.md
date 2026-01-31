@@ -32,6 +32,26 @@ $messages = $inbox->messages()
     ->get();
 ```
 
+#### Filtering by Message Size
+
+You can filter messages by their size in bytes using the `larger()` and `smaller()` methods:
+
+```php
+// Get messages larger than 5MB
+$messages = $inbox->messages()->larger(5 * 1024 * 1024)->get();
+
+// Get messages smaller than 100KB
+$messages = $inbox->messages()->smaller(100 * 1024)->get();
+
+// Get messages between 1MB and 10MB
+$messages = $inbox->messages()
+    ->larger(1 * 1024 * 1024)
+    ->smaller(10 * 1024 * 1024)
+    ->get();
+```
+
+This is useful for finding large emails that may contain attachments, or for filtering out small notification emails.
+
 #### Fetching Additional Message Data
 
 By default, ImapEngine search queries only fetch message UIDs.
