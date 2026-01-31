@@ -102,16 +102,16 @@ $mailbox = new Mailbox([
 
 | Option         | Type   | Description                                                        |
 |----------------|--------|--------------------------------------------------------------------|
-| port           | int    | The port number to connect to                                      |
-| host           | string | The hostname of the IMAP server                                    |
-| timeout        | int    | Connection timeout in seconds                                      |
-| debug          | bool   | Enable debug logging                                               |
-| username       | string | Your IMAP username                                                 |
-| password       | string | Your IMAP password or OAuth token                                  |
-| encryption     | string | Encryption method ('ssl', 'starttls', or `null` for no encryption) |
-| validate_cert  | bool   | Whether to validate SSL certificates                               |
-| authentication | string | Authentication method ('plain' or 'oauth')                         |
-| proxy          | array  | Proxy configuration options                                        |
+| `port`           | int    | The port number to connect to                                      |
+| `host`           | string | The hostname of the IMAP server                                    |
+| `timeout`        | int    | Connection timeout in seconds                                      |
+| `debug`          | bool   | Enable debug logging                                               |
+| `username`       | string | Your IMAP username                                                 |
+| `password`       | string | Your IMAP password or OAuth token                                  |
+| `encryption`     | string | Encryption method ('ssl', 'starttls', or `null` for no encryption) |
+| `validate_cert`  | bool   | Whether to validate SSL certificates                               |
+| `authentication` | string | Authentication method ('plain' or 'oauth')                         |
+| `proxy`          | array  | Proxy configuration options                                        |
 
 ## Debugging
 
