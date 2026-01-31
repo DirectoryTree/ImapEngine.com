@@ -459,6 +459,100 @@ Beyond just flagging, you may move or copy messages between folders, as well as 
 - `$message->move(string $folder, bool $expunge = false): void`: Moves the message to the specified folder.
 - `$message->delete(bool $expunge = false): void`: Marks the message as deleted and expunges it immediately from the folder (if `$expunge` is `true`).
 
+### Bulk Operations
+
+ImapEngine allows you to perform bulk operations on messages matching a query, without needing to fetch and iterate over each message individually. This is much more efficient than processing messages one by one.
+
+All bulk operations return the number of messages affected.
+
+#### Bulk Flag Operations
+
+You can mark multiple messages as read or unread in a single operation:
+
+```php
+// Mark all unseen messages as read
+$count = $inbox->messages()->unseen()->markRead();
+
+// Mark all messages from a sender as unread
+$count = $inbox->messages()->from('newsletter@example.com')->markUnread();
+```
+
+You can also flag or unflag multiple messages:
+
+```php
+// Flag all messages from your boss
+$count = $inbox->messages()->from('boss@company.com')->markFlagged();
+
+// Unflag old flagged messages
+$count = $inbox->messages()->flagged()->before('2024-01-01')->unmarkFlagged();
+```
+
+For custom flags, use the `flag()` method directly:
+
+```php
+use DirectoryTree\ImapEngine\Enums\ImapFlag;
+
+// Add a flag to matching messages
+$count = $inbox->messages()->subject('Important')->flag(ImapFlag::Flagged, '+');
+
+// Remove a flag from matching messages
+$count = $inbox->messages()->seen()->flag(ImapFlag::Seen, '-');
+```
+
+#### Bulk Move and Copy
+
+Move or copy multiple messages to another folder:
+
+```php
+// Move old messages to archive
+$count = $inbox->messages()->before('2023-01-01')->move('Archive');
+
+// Copy important messages to a backup folder
+$count = $inbox->messages()->flagged()->copy('Backup');
+```
+
+You can also expunge the folder after moving messages:
+
+```php
+// Move and immediately expunge
+$count = $inbox->messages()->from('spam@example.com')->move('Spam', expunge: true);
+```
+
+#### Bulk Delete
+
+Delete multiple messages matching a query:
+
+```php
+// Delete all messages from a sender
+$count = $inbox->messages()->from('spam@example.com')->delete();
+
+// Delete and immediately expunge
+$count = $inbox->messages()->before('2022-01-01')->delete(expunge: true);
+```
+
+{% callout type="warning" title="Important" %}
+Bulk operations execute directly on the IMAP server without fetching message content. This makes them very efficient, but also means they cannot be easily undone. Use with caution, especially with `delete()` and `expunge: true`.
+{% /callout %}
+
+#### Example: Cleaning Up a Mailbox
+
+```php
+// Mark all newsletters as read
+$inbox->messages()
+    ->from('newsletter@example.com')
+    ->markRead();
+
+// Archive messages older than 6 months
+$inbox->messages()
+    ->before(Carbon::now()->subMonths(6))
+    ->move('Archive');
+
+// Delete spam and expunge immediately
+$inbox->messages()
+    ->from('spam@example.com')
+    ->delete(expunge: true);
+```
+
 #### Example: Interacting with a Retrieved Message
 
 ```php
