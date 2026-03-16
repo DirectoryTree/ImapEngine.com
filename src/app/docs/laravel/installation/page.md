@@ -25,6 +25,9 @@ composer require directorytree/imapengine-laravel
 
 After installation, you should publish the package configuration file using the `vendor:publish` Artisan command:
 
+```bash
+php artisan vendor:publish --provider=DirectoryTree\ImapEngine\Laravel\ImapServiceProvider
+```
 
 This will create a `config/imap.php` configuration file in your application.
 
