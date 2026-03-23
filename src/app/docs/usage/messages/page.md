@@ -259,8 +259,50 @@ To conveniently work with headers, the `Message` class includes several methods 
 **Metadata**
 
 - `$message->subject(): string|null`: Retrieve the subject of the message.
-- `$message->date(): Carbon|null`: Retrieve the message’s date as a Carbon instance (if available).
+- `$message->date(): Carbon|null`: Retrieve the message's date as a Carbon instance (if available).
 - `$message->messageId(): ?string|null`: Retrieves the Message-ID header (globally unique identifier for the message).
+
+#### On-Demand Fetching
+
+By default, accessor methods like `subject()`, `from()`, `text()`, and others require the message data to already be loaded (via `withHeaders()`, `withBody()`, etc. on the query).
+
+If you want to fetch the required data on-demand when it's not already loaded, you can pass `fetch: true` to these methods:
+
+```php
+// Fetch headers on-demand if not already loaded
+$to = $message->to(fetch: true);
+$from = $message->from(fetch: true);
+$date = $message->date(fetch: true);
+$subject = $message->subject(fetch: true);
+
+// Fetch body content on-demand if not already loaded
+$text = $message->text(fetch: true);
+$html = $message->html(fetch: true);
+
+// Fetch attachments using body structure (efficient)
+$attachments = $message->attachments(fetch: true);
+```
+
+{% callout type="note" title="How It Works" %}
+When you pass `fetch: true`:
+- For header methods (`subject`, `from`, `date`, etc.): The message headers are fetched from the server if not already loaded.
+- For body methods (`text`, `html`): The body structure is used to efficiently fetch only the required part.
+- For `attachments`: The body structure is used to create lazy-loading attachment streams that fetch content only when accessed.
+
+After the first fetch, subsequent calls with `fetch: true` will use the cached data.
+{% /callout %}
+
+This is particularly useful when you have a message instance but haven't preloaded any of the message's data:
+
+```php
+// Find a message without its data
+$message = $inbox->messages()->find($uid);
+
+// Fetch what you need on-demand
+$from = $message->from(fetch: true);
+$subject = $message->subject(fetch: true);
+$attachments = $message->attachments(fetch: true);
+```
 
 #### Additional Message Details
 
@@ -281,13 +323,21 @@ Quickly check whether a message has a specific flag:
 
 To conveniently work with email addresses, the `Message` class includes methods that return addresses as instances of the `DirectoryTree\ImapEngine\Address` class:
 
-- `$message->from(): Address|null`: The sender’s address.
+- `$message->from(): Address|null`: The sender's address.
 - `$message->sender(): Address|null`: The actual sender (if different from "from").
 - `$message->replyTo(): Address|null`: The reply-to address.
-- `$message->inReplyTo(): Address|null`: The In-Reply-To address.
+- `$message->inReplyTo(): string[]`: The In-Reply-To message identifiers.
 - `$message->to(): Address[]`: An array of recipient addresses.
 - `$message->cc(): Address[]`: An array of CC addresses.
 - `$message->bcc(): Address[]`: An array of BCC addresses.
+
+All address methods support on-demand fetching:
+
+```php
+$from = $message->from(fetch: true);
+$to = $message->to(fetch: true);
+$cc = $message->cc(fetch: true);
+```
 
 #### Content Retrieval
 
@@ -295,6 +345,13 @@ For accessing the message content in different formats:
 
 - `$message->html(): string`: Retrieve the HTML version of the message (if available).
 - `$message->text(): string`: Retrieve the plain text version of the message (if available).
+
+Both methods support on-demand fetching:
+
+```php
+$text = $message->text(fetch: true);
+$html = $message->html(fetch: true);
+```
 
 #### Body Structure
 
@@ -319,6 +376,12 @@ foreach ($messages as $message) {
         $structure = $message->bodyStructure();
     }
 }
+```
+
+You can also fetch body structure on-demand:
+
+```php
+$structure = $message->bodyStructure(fetch: true);
 ```
 
 **Understanding Body Structure**
@@ -496,6 +559,20 @@ To conveniently work with attachments, the `Message` class includes methods that
 - `$message->hasAttachments(): bool`: Checks if the message contains any attachments.
 - `$message->attachmentCount(): int`: Retrieve the number of attachments in the message.
 
+**On-Demand Attachment Loading**
+
+You can fetch attachments on-demand using the message's body structure, which is more efficient than fetching the full message body:
+
+```php
+// Fetch attachments using body structure
+$attachments = $message->attachments(fetch: true);
+
+foreach ($attachments as $attachment) {
+    // Performs a `FETCH` request for the attachment's content
+    $contents = $attachment->contents(); 
+}
+```
+
 For each attachment, you may access the following properties:
 
 - `$attachment->filename(): string|null`: Retrieve the attachment's filename.
@@ -664,6 +741,7 @@ foreach ($message->attachments() as $attachment) {
 
     // Get the attachment's contents.
     $attachment->contents();
+
 
     // Get the attachment's extension.
     $extension = $attachment->extension();
