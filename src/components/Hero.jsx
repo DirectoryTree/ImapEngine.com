@@ -52,10 +52,10 @@ export function Hero() {
           <div className="relative z-10 md:text-center lg:text-left">
             <div className="relative">
               <p className="inline font-display text-5xl tracking-tight text-black dark:text-white">
-                Simple IMAP for PHP
+                Native IMAP for PHP
               </p>
               <p className="mt-3 text-2xl tracking-tight text-slate-400">
-                Manage IMAP mailboxes without the PHP extension.
+                Manage mailboxes over IMAP without the PHP extension.
               </p>
               <div className="mt-8 flex gap-4 md:justify-center lg:justify-start">
                 <Button href="/docs/installation">Get started</Button>
