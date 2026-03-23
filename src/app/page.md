@@ -2,7 +2,7 @@
 title: ImapEngine
 ---
 
-A simple, fluent API for managing IMAP mailboxes in PHP. {% .lead %}
+A simple, fluent API for managing mailboxes over IMAP in PHP. {% .lead %}
 
 {% quick-links %}
 
