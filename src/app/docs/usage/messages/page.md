@@ -771,16 +771,16 @@ use DirectoryTree\ImapEngine\DraftMessage;
 
 $uid = $inbox->messages()->append(
     new DraftMessage(
-        from: = 'foo@email.com',
-        to: = 'bar@email.com',
-        subject: = 'Hello World'
-        text: = 'This is the message body.',
-        html: = '<p>This is the message body.</p>',
+        from: 'foo@email.com',
+        to: 'bar@email.com',
+        subject: 'Hello World',
+        text: 'This is the message body.',
+        html: '<p>This is the message body.</p>',
     )
 );
 ```
 
-Draft messages also accept attachments:
+Draft messages also accept attachments. Each attachment should be passed as its own item in the `attachments` array:
 
 ```php
 $inbox->messages()->append(
@@ -789,6 +789,36 @@ $inbox->messages()->append(
         attachments: [
             '/path/to/attachment.pdf',
             '/path/to/another-attachment.jpg',
+        ]
+    )
+);
+```
+
+You may also attach open resources:
+
+```php
+$resource = fopen('/path/to/report.csv', 'r');
+
+$inbox->messages()->append(
+    new DraftMessage(
+        // ...
+        attachments: [
+            $resource,
+        ]
+    )
+);
+```
+
+Existing `Attachment` objects can be attached as well. This is useful when copying an attachment from one message into a new draft:
+
+```php
+$attachments = $message->attachments(fetch: true);
+
+$inbox->messages()->append(
+    new DraftMessage(
+        // ...
+        attachments: [
+            $attachments[0],
         ]
     )
 );
