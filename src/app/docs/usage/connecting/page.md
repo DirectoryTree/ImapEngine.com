@@ -25,6 +25,12 @@ If connecting fails, an `ImapConnectionException` exception is thrown.
 
 If authentication fails, an `ImapCommandException` exception is thrown.
 
+The `connection()` method also establishes the connection if it has not already been opened:
+
+```php
+$connection = $mailbox->connection();
+```
+
 ```php
 use DirectoryTree\ImapEngine\Mailbox;
 use DirectoryTree\ImapEngine\Exceptions\ImapCommandException;
@@ -76,9 +82,19 @@ This logs out and disconnects from the server.
 If you need low-level access to the active connection, you can retrieve it via `connection()`:
 
 ```php
+use DirectoryTree\ImapEngine\Enums\ImapFetchIdentifier;
+
 // DirectoryTree\ImapEngine\Connection\ImapConnection
 $connection = $mailbox->connection();
+
+$responses = $connection->fetch(
+    ['FLAGS', 'RFC822.SIZE'],
+    [123, 124],
+    identifier: ImapFetchIdentifier::Uid,
+);
 ```
+
+Most applications should prefer the higher-level mailbox, folder, and message APIs. Use the underlying connection when you need to send IMAP commands that are not covered by those APIs.
 
 ## Retrieving Supported Capabilities
 

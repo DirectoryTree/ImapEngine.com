@@ -18,6 +18,13 @@ $mailbox = new Mailbox([
     'encryption' => 'ssl',
     'host' => 'imap.example.com',
 ]);
+
+// You may also use the static constructor.
+$mailbox = Mailbox::make([
+    'host' => 'imap.example.com',
+    'username' => 'your-username',
+    'password' => 'your-password',
+]);
 ```
 
 ## OAuth Connection
@@ -105,13 +112,29 @@ $mailbox = new Mailbox([
 | `port`           | int    | The port number to connect to                                      |
 | `host`           | string | The hostname of the IMAP server                                    |
 | `timeout`        | int    | Connection timeout in seconds                                      |
-| `debug`          | bool   | Enable debug logging                                               |
+| `debug`          | bool|string | Enable debug logging, file logging, or a custom logger class       |
 | `username`       | string | Your IMAP username                                                 |
 | `password`       | string | Your IMAP password or OAuth token                                  |
-| `encryption`     | string | Encryption method ('ssl', 'starttls', or `null` for no encryption) |
+| `encryption`     | string|null | Encryption method ('ssl', 'starttls', or `null` for no encryption) |
 | `validate_cert`  | bool   | Whether to validate SSL certificates                               |
 | `authentication` | string | Authentication method ('plain' or 'oauth')                         |
 | `proxy`          | array  | Proxy configuration options                                        |
+
+If you are connecting through a proxy, configure the `proxy` array with the socket and optional credentials expected by PHP's stream context:
+
+```php
+$mailbox = new Mailbox([
+    // ...
+    'proxy' => [
+        'socket' => 'tcp://proxy.example.com:8080',
+        'username' => 'proxy-user',
+        'password' => 'proxy-password',
+        'request_fulluri' => true,
+    ],
+]);
+```
+
+Set `validate_cert` to `false` only when connecting to a server with a self-signed or otherwise untrusted certificate that you explicitly trust.
 
 ## Debugging
 

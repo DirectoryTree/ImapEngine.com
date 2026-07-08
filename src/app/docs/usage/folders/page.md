@@ -8,7 +8,7 @@ nextjs:
 
 To retrieve folders from an IMAP mailbox, you may use the `folders()` method on the `Mailbox` instance.
 
-This method returns a `FolderRespository` instance, which provides operations for retrieving, creating, and managing folders:
+This method returns a `FolderRepository` instance, which provides operations for retrieving, creating, and managing folders:
 
 ```php
 use DirectoryTree\ImapEngine\Mailbox;

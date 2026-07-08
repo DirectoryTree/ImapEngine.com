@@ -24,11 +24,78 @@ While the `since()` method accepts a datetime instance, it does not filter
 by time -- only by date. [IMAP does not support time-based filtering](https://datatracker.ietf.org/doc/html/rfc9051#section-6.4.4-15.43).
 {% /callout %}
 
+#### Common Search Helpers
+
+ImapEngine includes helpers for the common IMAP search criteria:
+
+```php
+// Search by sender, recipient, subject, or message body text.
+$messages = $inbox->messages()
+    ->from('sender@example.com')
+    ->to('recipient@example.com')
+    ->subject('Invoice')
+    ->body('payment due')
+    ->get();
+
+// Search by Message-ID. Angle brackets are optional.
+$messages = $inbox->messages()
+    ->messageId('<message-id@example.com>')
+    ->get();
+
+// Search by UID, UID list, or UID range.
+$messages = $inbox->messages()->uid(123)->get();
+$messages = $inbox->messages()->uid([123, 124, 125])->get();
+$messages = $inbox->messages()->uid(123, INF)->get();
+```
+
+You may also search by standard IMAP message state and keywords:
+
+```php
+$unread = $inbox->messages()->unseen()->get();
+$read = $inbox->messages()->seen()->get();
+$flagged = $inbox->messages()->flagged()->get();
+$unflagged = $inbox->messages()->unflagged()->get();
+$answered = $inbox->messages()->answered()->get();
+$unanswered = $inbox->messages()->unanswered()->get();
+$deleted = $inbox->messages()->deleted()->get();
+$undeleted = $inbox->messages()->undeleted()->get();
+$drafts = $inbox->messages()->draft()->get();
+$recent = $inbox->messages()->recent()->get();
+$new = $inbox->messages()->new()->get();
+$old = $inbox->messages()->old()->get();
+$keyword = $inbox->messages()->keyword('$Forwarded')->get();
+$notKeyword = $inbox->messages()->unkeyword('$Junk')->get();
+```
+
+Date helpers are available for both received dates and sent dates:
+
+```php
+// Received date helpers.
+$messages = $inbox->messages()->on('2026-07-07')->get();
+$messages = $inbox->messages()->since(Carbon::now()->subWeek())->get();
+$messages = $inbox->messages()->before('2026-08-01')->get();
+
+// Sent date helpers.
+$messages = $inbox->messages()->sentOn('2026-07-07')->get();
+$messages = $inbox->messages()->sentSince(Carbon::now()->subWeek())->get();
+$messages = $inbox->messages()->sentBefore('2026-08-01')->get();
+```
+
 If a method doesn't exist for a specific search criteria, you may use the `where()` method to add custom criteria:
 
 ```php
 $messages = $inbox->messages()
     ->where('CRITERIA', 'value')
+    ->get();
+```
+
+You may group criteria with closures and use `orWhere()` or `whereNot()` for more complex searches:
+
+```php
+$messages = $inbox->messages()
+    ->where(fn ($query) => $query->from('boss@example.com')->unseen())
+    ->orWhere(fn ($query) => $query->flagged()->subject('Important'))
+    ->whereNot('DELETED')
     ->get();
 ```
 
@@ -98,6 +165,36 @@ $messages = $inbox->messages()
 {% callout type="note" title="Performance Tip" %}
 Fetching body structure is much more efficient than fetching the full message body when you only need to inspect the message's MIME structure, parts, or attachments metadata without downloading the actual content.
 {% /callout %}
+
+**Message Size:**
+
+Use `withSize()` to fetch the server-reported message size, or `withoutSize()` to skip it.
+
+```php
+$messages = $inbox->messages()
+    ->withSize()
+    ->get();
+```
+
+**Unread Fetching:**
+
+When fetching headers or body content, ImapEngine uses `BODY.PEEK[...]` by default so messages remain unread. Call `markAsRead()` when you want the fetch itself to mark messages as seen, or `leaveUnread()` to make that intent explicit:
+
+```php
+// Default behavior: fetch content without marking messages as read.
+$messages = $inbox->messages()
+    ->leaveUnread()
+    ->withHeaders()
+    ->withBody()
+    ->get();
+
+// Fetch content and mark messages as read on the server.
+$messages = $inbox->messages()
+    ->markAsRead()
+    ->withHeaders()
+    ->withBody()
+    ->get();
+```
 
 #### Server-Side Sorting
 
@@ -568,8 +665,11 @@ You can fetch attachments on-demand using the message's body structure, which is
 $attachments = $message->attachments(fetch: true);
 
 foreach ($attachments as $attachment) {
-    // Performs a `FETCH` request for the attachment's content
-    $contents = $attachment->contents(); 
+    // Performs a `FETCH` request for the attachment's content.
+    $contents = $attachment->contents();
+
+    // Save the attachment to disk.
+    $attachment->save('/path/to/'.$attachment->filename());
 }
 ```
 
@@ -579,7 +679,10 @@ For each attachment, you may access the following properties:
 - `$attachment->contents(): string`: Retrieve the attachment's contents.
 - `$attachment->contentId(): string|null`: Retrieve the attachment's content ID (cid).
 - `$attachment->contentType(): string`: Retrieve the attachment's content type.
-- `$attachment->contentStream(): StreamInterface`: Retrieve the attachment's contents as a stream.
+- `$attachment->contentDisposition(): string`: Retrieve the attachment's content disposition.
+- `$attachment->contentStream(): StreamInterface`: Retrieve the attachment's contents as a stream for stream-level access.
+- `$attachment->extension(): string|null`: Guess the attachment extension from the filename or content type.
+- `$attachment->save($path): false|int`: Save the attachment contents to disk.
 
 {% callout type="warning" title="Important" %}
 The attachment's content type is determined by the `Content-Type` header provided in the email, and may not always be accurate.
@@ -741,7 +844,6 @@ foreach ($message->attachments() as $attachment) {
 
     // Get the attachment's contents.
     $attachment->contents();
-
 
     // Get the attachment's extension.
     $extension = $attachment->extension();

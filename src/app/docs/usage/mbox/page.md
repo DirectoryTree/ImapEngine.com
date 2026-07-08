@@ -53,7 +53,7 @@ Every message read from the Mbox file is returned as an instance of `DirectoryTr
 /** @var \DirectoryTree\ImapEngine\FileMessage $message */
 foreach ($mbox->messages() as $message) {
     // Get the raw contents of the message:
-    $raw = $message->raw();
+    $raw = (string) $message;
 
     // Check if the message has a body:
     if ($message->hasBody()) {
