@@ -62,6 +62,61 @@ Imap::register('temporary', [
 $mailbox = Imap::mailbox('temporary');
 ```
 
+## Processing Messages in Queued Jobs
+
+Use [cursor pagination](/docs/usage/messages#cursor-pagination) to give each job one page of messages. After processing the page, dispatch the same job with the next cursor. Laravel can serialize the ImapEngine `Cursor` and `Mailbox` objects directly. `ShouldBeEncrypted` protects the mailbox credentials in the queue payload.
+
+In this example, `ImportMessage` is your application's action for importing an individual message.
+
+```php
+namespace App\Jobs;
+
+use App\Actions\ImportMessage;
+use DirectoryTree\ImapEngine\Mailbox;
+use DirectoryTree\ImapEngine\Pagination\Cursor;
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldBeEncrypted;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\Dispatchable;
+
+class ImportInbox implements ShouldQueue, ShouldBeEncrypted
+{
+    use Dispatchable, Queueable;
+
+    public function __construct(
+        public Mailbox $mailbox,
+        public ?Cursor $cursor = null,
+    ) {}
+
+    public function handle(ImportMessage $import): void
+    {
+        $page = $this->mailbox->inbox()->messages()
+            ->oldest()
+            ->withBody()
+            ->cursorPaginate(perPage: 100, cursor: $this->cursor);
+
+        foreach ($page->items() as $message) {
+            $import->handle($message);
+        }
+
+        if ($cursor = $page->nextCursor()) {
+            static::dispatch($this->mailbox, $cursor);
+        }
+    }
+}
+```
+
+Start the import with a configured mailbox.
+
+```php
+use App\Jobs\ImportInbox;
+use DirectoryTree\ImapEngine\Laravel\Facades\Imap;
+
+ImportInbox::dispatch(Imap::mailbox('default'));
+```
+
+Make the import action safe to run again if a job retries after processing part of a page.
+
 ## Monitoring Mailboxes
 
 The package includes an Artisan command for monitoring mailboxes for new messages.

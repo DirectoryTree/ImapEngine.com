@@ -205,6 +205,9 @@ $mailbox = new FakeMailbox(folders: [$inbox]);
 $query = $mailbox->inbox()->messages();
 
 expect($query->count())->toBe(2);
+expect($query->exists())->toBeTrue();
+expect($query->oldest()->uids()->all())->toBe([1, 2]);
+expect($query->lazy(1)->first()->uid())->toBe(1);
 expect($query->find(2)->subject())->toBe('Second Email');
 expect($query->append("Subject: Third Email\r\n\r\nThird email content."))->toBe(3);
 expect($query->paginate(perPage: 2))->toHaveCount(2);
@@ -212,6 +215,15 @@ expect($query->paginate(perPage: 2))->toHaveCount(2);
 $query->destroy(2);
 
 expect($query->find(2))->toBeNull();
+```
+
+Cursor pagination is available on a fake folder attached to a `FakeMailbox`. Use `nextCursor()` to fetch the next page with the same query.
+
+```php
+$page = $query->cursorPaginate(perPage: 1);
+
+expect($page->items()->first()->uid())->toBe(1);
+expect($query->cursorPaginate(perPage: 1, cursor: $page->nextCursor())->items()->first()->uid())->toBe(3);
 ```
 
 {% callout type="note" title="Search Criteria" %}

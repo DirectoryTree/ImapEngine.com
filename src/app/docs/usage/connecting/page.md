@@ -77,6 +77,12 @@ $mailbox->disconnect();
 
 This logs out and disconnects from the server.
 
+## Serializing a Mailbox
+
+A serialized `Mailbox` contains its configuration. After restoring it, ImapEngine opens a fresh connection on first use.
+
+If your Laravel job carries a `Mailbox`, implement `ShouldBeEncrypted` because the serialized configuration can include credentials. See [processing messages in queued jobs](/docs/laravel/usage#processing-messages-in-queued-jobs).
+
 ## Accessing the Underlying Connection
 
 If you need low-level access to the active connection, you can retrieve it via `connection()`:

@@ -119,6 +119,40 @@ $messages = $inbox->messages()
 
 This is useful for finding large emails that may contain attachments, or for filtering out small notification emails.
 
+#### Checking for Matches
+
+Use `exists()` or `doesntExist()` to check whether any messages match the search. Both return a boolean without fetching message data.
+
+```php
+$hasUnread = $inbox->messages()->unseen()->exists();
+$hasNoDrafts = $inbox->messages()->draft()->doesntExist();
+```
+
+#### Retrieving UIDs
+
+Use `uids()` to get an `Illuminate\Support\Collection` of integer UIDs without fetching the messages. It uses the same search criteria, order, and page limit as `get()`.
+
+```php
+$uids = $inbox->messages()->unseen()->oldest()->uids();
+
+$newUids = $uids->diff($importedUids);
+```
+
+Call `all()` on the collection when you need a PHP array.
+
+#### Retrieving Exactly One Match
+
+Use `sole()` when you expect exactly one message to match the search.
+
+```php
+$message = $inbox->messages()
+    ->messageId('<message-id@example.com>')
+    ->withHeaders()
+    ->sole();
+```
+
+`sole()` checks the full search regardless of pagination. It throws `Illuminate\Support\ItemNotFoundException` if no message matches and `Illuminate\Support\MultipleItemsFoundException` if it finds a second match.
+
 #### Fetching Additional Message Data
 
 By default, ImapEngine search queries only fetch message UIDs.
@@ -257,18 +291,32 @@ Server-side sorting requires the IMAP server to support the SORT capability (RFC
 
 #### Message Pagination
 
-You may paginate messages using the `paginate()` method. This method accepts the number of messages to display per page:
-
-{% callout type="warning" title="Important" %}
-IMAP does not support native pagination as you would typically expect like a SQL database. Instead,
-ImapEngine retrieves all UID's from the selected folder, takes the slice of the UID's  that
-corresponds to the current page, and fetches the requested email message parts specifically for those UID's.
-{% /callout %}
+Use `paginate()` when you need numbered pages and a total message count. ImapEngine finds the matching UIDs, selects the requested page, and fetches message data for that page.
 
 ```php
-// Paginate messages with 10 messages per page.
-$paginatedMessages = $inbox->messages()->paginate(10);
+$page = $inbox->messages()->paginate(perPage: 10, page: 2);
 ```
+
+#### Cursor Pagination
+
+Use `cursorPaginate()` when you need to scan a folder or resume a scan in a later request or queued job. Choose `oldest()` or `newest()` to control the UID order. Server-side `sortBy()` is unavailable for cursor pagination.
+
+```php
+$query = $inbox->messages()->unseen()->oldest()->withHeaders();
+$cursor = null;
+
+do {
+    $page = $query->cursorPaginate(perPage: 100, cursor: $cursor);
+
+    foreach ($page->items() as $message) {
+        // Process the message.
+    }
+} while ($cursor = $page->nextCursor());
+```
+
+Pass the `Cursor` object directly to the next call or use `$cursor->encode()` to store it as a string. Use the same mailbox, folder, filters, and order when resuming. Restart the scan if the server changes the folder's `UIDVALIDITY`.
+
+The first page establishes an upper UID for the scan. Messages arriving later are picked up by a new scan. If messages disappear before the page is fetched, `items()` may be empty while `nextCursor()` still has a value. Continue until `nextCursor()` returns `null`.
 
 #### Message Chunking
 
@@ -291,6 +339,18 @@ use DirectoryTree\ImapEngine\Message;
 $inbox->messages()->each(function (Message $message) {
     // Do something with the message.
 }, chunkSize: 20);
+```
+
+#### Lazy Iteration
+
+Use `lazy()` to iterate through a large set of messages with `foreach` or compose the results with collection methods such as `filter()` and `take()`. It returns an `Illuminate\Support\LazyCollection`. ImapEngine looks up the matching UIDs when you start iterating and fetches message data in batches as needed.
+
+```php
+$messages = $inbox->messages()->oldest()->withHeaders()->lazy(chunkSize: 100);
+
+foreach ($messages as $message) {
+    // Process the message.
+}
 ```
 
 #### Finding a Specific Message
