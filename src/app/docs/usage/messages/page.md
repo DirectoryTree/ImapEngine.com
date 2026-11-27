@@ -10,7 +10,7 @@ ImapEngine provides a rich set of methods to interact with email messages, allow
 
 ## Retrieving and Searching for Messages
 
-For example, to retrieve messages from the last 7 days with a specific subject:
+For example, to retrieve messages from the last 7 days with a subject containing a specific string:
 
 ```php
 $messages = $inbox->messages()
